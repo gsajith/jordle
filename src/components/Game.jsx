@@ -21,7 +21,7 @@ const TopBarContainer = styled.div`
   justify-content: space-between;
 `;
 
-export const TopBar = () => {
+export const Game = () => {
   return (
     <TopBarContainer>
       <div>x</div>
@@ -31,4 +31,4 @@ export const TopBar = () => {
   );
 };
 
-export default TopBar;
+export default Game;
