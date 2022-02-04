@@ -1,9 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
+import {isLetter} from "../utils";
 
 const KeyboardContainer = styled.div`
   height: 200px;
-  margin: 0;
+  margin: 0 8px;
   user-select: none;
 `;
 
@@ -25,18 +26,23 @@ const Key = styled.button`
   user-select: none;
   background-color: ${(props) => props.theme.keyBackgroundColor};
   color: ${(props) => props.theme.keyTextColor};
-  tap-highlight-color: ${(props) => props.theme.keyHighlightColor};
-  flex: 1;
+  -webkit-tap-highlight-color: ${(props) => props.theme.keyHighlightColor};
+  flex: ${(props) => (props.largeButton ? 1.5 : 1)};
+  font-size: ${props => props.largeButton ? "12px" : "inherit"};
   display: flex;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
 `;
 
+const RowSpacer = styled.div`
+  flex: 0.5;
+`;
+
 const KEYS = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  ["enter", "z", "x", "c", "v", "b", "n", "m", "back"],
+  ["enter", "z", "x", "c", "v", "b", "n", "m", "⏪"],
 ];
 
 export const Keyboard = () => {
@@ -45,9 +51,15 @@ export const Keyboard = () => {
       {KEYS.map((row, index) => {
         return (
           <Row key={"row" + index}>
+            {index === 1 && <RowSpacer />}
             {row.map((key) => {
-              return <Key key={key}>{key}</Key>;
+              return (
+                <Key key={key} largeButton={!isLetter(key)}>
+                  {key}
+                </Key>
+              );
             })}
+            {index === 1 && <RowSpacer />}
           </Row>
         );
       })}

@@ -1,7 +1,6 @@
 /* Basic page style resets */
 * {
   box-sizing: border-box;
-  border: 1px dotted red;
 }
 
 html, #root, .wrapper, .content {
