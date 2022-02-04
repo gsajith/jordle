@@ -1,10 +1,19 @@
 /* Basic page style resets */
 * {
   box-sizing: border-box;
+  border: 1px dotted red;
+}
+
+html, #root, .wrapper, .content {
+  height: 100%;
 }
 
 body {
   font-family: "Open Sans","Helvetica Neue", Arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: hidden;
 }
 
 [hidden] {

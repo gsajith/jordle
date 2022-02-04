@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { TITLE } from "../static/globals";
+import Keyboard from "./Keyboard";
 
 const Title = styled.div`
   text-transform: uppercase;
@@ -10,24 +11,34 @@ const Title = styled.div`
   pointer-events: none;
 `;
 
-const TopBarContainer = styled.div`
+const GameContainer = styled.div`
   display: flex;
-  width: 100%;
+  justify-content: center;
   align-items: center;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: ${props => props.theme.borderColor};
-  height: 50px;
-  justify-content: space-between;
+  flex-grow: 1;
+  overflow: hidden;
+`;
+
+const GameGridContainer = styled.div`
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 350px;
+  height: 420px;
+  background-color: red;
 `;
 
 export const Game = () => {
   return (
-    <TopBarContainer>
-      <div>x</div>
-      <Title>{TITLE}</Title>
-      <div>y</div>
-    </TopBarContainer>
+    <>
+    <GameContainer>
+      <GameGridContainer>
+      </GameGridContainer>
+    </GameContainer>
+      <Keyboard/>
+    </>
   );
 };
 
