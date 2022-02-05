@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import {WORD_LENGTH, NUM_GUESSES} from "../static/globals";
+import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -19,12 +19,34 @@ const GridRow = styled.div`
   grid-gap: 5px;
 `;
 
+const GridItem = styled.div`
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  vertical-align: middle;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  user-select: none;
+`;
+
 const GameGrid = () => {
-  return (<GameGridContainer>
-    {[...Array(NUM_GUESSES)].map(row => {
-        return (<GridRow>{[...Array(WORD_LENGTH)]}</GridRow>)
+  return (
+    <GameGridContainer>
+      {[...Array(NUM_GUESSES)].map((row) => {
+        return (
+          <GridRow>
+            {[...Array(WORD_LENGTH)].map((item) => {
+              return <GridItem />;
+            })}
+          </GridRow>
+        );
       })}
-    </GameGridContainer>);
+    </GameGridContainer>
+  );
 };
 
 export default GameGrid;
