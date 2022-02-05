@@ -31,6 +31,7 @@ const GridItem = styled.div`
   box-sizing: border-box;
   text-transform: uppercase;
   user-select: none;
+  border: 2px solid ${props => props.theme.gridBorderColor};
 `;
 
 const GameGrid = () => {
