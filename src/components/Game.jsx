@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { TITLE } from "../static/globals";
 import Keyboard from "./Keyboard";
+import GameGrid from "./GameGrid";
 
 const Title = styled.div`
   text-transform: uppercase;
@@ -19,23 +20,11 @@ const GameContainer = styled.div`
   overflow: hidden;
 `;
 
-const GameGridContainer = styled.div`
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
-  grid-gap: 5px;
-  padding: 10px;
-  box-sizing: border-box;
-  width: 350px;
-  height: 420px;
-  background-color: red;
-`;
-
 export const Game = () => {
   return (
     <>
     <GameContainer>
-      <GameGridContainer>
-      </GameGridContainer>
+      <GameGrid/>
     </GameContainer>
       <Keyboard/>
     </>
