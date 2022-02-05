@@ -5,4 +5,5 @@ export const theme = {
   keyBackgroundColor: "#818384",
   keyTextColor: "#d7dadc",
   keyHighlightColor: "#0000004d",
+  gridBorderColor: "#3a3a3c"
 };

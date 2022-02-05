@@ -10,7 +10,6 @@ const GameGridContainer = styled.div`
   box-sizing: border-box;
   width: 350px;
   height: 420px;
-  background-color: red;
 `;
 
 const GridRow = styled.div`
