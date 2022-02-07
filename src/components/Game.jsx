@@ -30,6 +30,7 @@ const GameContainer = styled.div`
 export const Game = () => {
   const [guesses, setGuesses] = React.useState([[]]);
   const [numGuesses, setNumGuesses] = React.useState(0);
+  const answer = React.useRef(null);
 
   const addGuessLetter = (letter) => {
     setGuesses((oldGuesses) => {
@@ -50,6 +51,10 @@ export const Game = () => {
       return newGuesses;
     });
   }
+  
+  React.useEffect(() => {
+    answer.current = "lares";
+  }, []);
 
   return (
     <>
