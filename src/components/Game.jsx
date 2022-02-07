@@ -37,7 +37,6 @@ export const Game = () => {
       if (newGuesses[numGuesses].length < WORD_LENGTH) {
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
-      console.log(newGuesses);
       return newGuesses;
     });
   };
@@ -51,16 +50,6 @@ export const Game = () => {
       return newGuesses;
     });
   }
-  
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     addGuessLetter('a');
-  //     addGuessLetter('c');
-  //     setTimeout(() => {
-  //       removeGuessLetter();
-  //     }, 1000);
-  //   }, 1000);
-  // }, []);
 
   return (
     <>

@@ -47,11 +47,22 @@ const KEYS = [
 ];
 
 export const Keyboard = ({addGuessLetter, removeGuessLetter}) => {
+  const keyPressed = (evt) => {
+    if (KEYS.some(row => row.includes(evt.key))) {
+      addGuessLetter(evt.key);
+    }
+    if (evt.key === "Backspace") {
+      removeGuessLetter();
+    }
+  }
+  React.useEffect(() => {
+    document.addEventListener("keydown", keyPressed);
+    return () => {
+      document.removeEventListener("keydown", keyPressed);
+    }
+  }, []);
   return (
     <KeyboardContainer>
-      <input type="text" onKeyPress={(event) => {
-          console.log(event.key);
-        }}/>
       {KEYS.map((row, index) => {
         return (
           <Row key={"row" + index}>
