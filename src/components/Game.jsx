@@ -4,6 +4,7 @@ import { TITLE } from "../static/globals";
 import Keyboard from "./Keyboard";
 import GameGrid from "./GameGrid";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
+import wordlist from "../static/wordlist";
 
 export const EMPTY = 0;
 export const GUESS = 1;
@@ -57,6 +58,7 @@ export const Game = () => {
     const currentDate = new Date();
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()+1);
     console.log(date.getTime());
+    console.log(wordlist);
   }, []);
 
   return (

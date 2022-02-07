@@ -1,3 +1,4 @@
+const wordlist = `
 ACKEE
 ADOBO
 AIOLI
@@ -237,3 +238,6 @@ WHEAT
 WHELK
 YQUEM
 ZOMBI
+`;
+
+export default wordlist;
