@@ -58,7 +58,7 @@ export const Game = () => {
     const currentDate = new Date();
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()+1);
     console.log(date.getTime());
-    console.log(wordlist);
+    console.log(wordlist.split("\n"));
   }, []);
 
   return (
