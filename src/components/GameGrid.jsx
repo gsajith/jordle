@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
-import {EMPTY, NO, YES, MAYBE} from "./Game";
+import { EMPTY, GUESS, NO, YES, MAYBE } from "./Game";
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -31,25 +31,30 @@ const GridItem = styled.div`
   box-sizing: border-box;
   text-transform: uppercase;
   user-select: none;
-  border: 2px solid ${(props) => {
-    switch(props.state) {
-      case EMPTY:
-        return props.theme.gridBorderColor;
-      case NO:
-        return props.theme.gridBorderColorNo;
-      case YES:
-        return props.theme.gridBorderColorYes;
-      case MAYBE:
-        return props.theme.gridBorderColorMaybe;
-      default:
-        return props.theme.gridBorderColor;
-    }
-    return props.theme.gridBorderColor;
-  }};
+  border: 2px solid
+    ${(props) => {
+      switch (props.state) {
+        case EMPTY:
+          return props.theme.gridBorderColor;
+        case GUESS:
+          return props.theme.gridBorderColorGuess;
+        case NO:
+          return props.theme.gridBorderColorNo;
+        case YES:
+          return props.theme.gridBorderColorYes;
+        case MAYBE:
+          return props.theme.gridBorderColorMaybe;
+        default:
+          return props.theme.gridBorderColor;
+      }
+      return props.theme.gridBorderColor;
+    }};
   background-color: ${(props) => {
-    switch(props.state) {
+    switch (props.state) {
       case EMPTY:
         return props.theme.gridColor;
+      case GUESS:
+        return props.theme.gridColorGuess;
       case NO:
         return props.theme.gridColorNo;
       case YES:
@@ -61,21 +66,28 @@ const GridItem = styled.div`
     }
     return props.theme.gridColor;
   }};
-  
 `;
 
-const GameGrid = ({guesses}) => {
+const GameGrid = ({ guesses }) => {
   return (
     <GameGridContainer>
       {[...Array(NUM_GUESSES)].map((row, index) => {
         return (
-          <GridRow key={"row"+index}>
+          <GridRow key={"row" + index}>
             {[...Array(WORD_LENGTH)].map((item, rowIndex) => {
               const letter =
-                guesses !== undefined && guesses[index] && guesses[index][rowIndex].letter;
+                guesses &&
+                guesses.length > index &&
+                guesses[index] &&
+                guesses[index].length > rowIndex &&
+                guesses[index][rowIndex].letter;
               const state =
-                guesses && guesses[index] && guesses[index][rowIndex].state;
-              
+                guesses &&
+                guesses.length > index &&
+                guesses[index] &&
+                guesses[index].length > rowIndex &&
+                guesses[index][rowIndex].state;
+
               return (
                 <GridItem state={state} key={"item" + row + " " + rowIndex}>
                   {letter !== undefined && letter}

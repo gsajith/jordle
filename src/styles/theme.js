@@ -7,6 +7,8 @@ export const theme = {
   keyHighlightColor: "#0000004d",
   gridColor: "transparent",
   gridBorderColor: "#3a3a3c",
+  gridColorGuess: "transparent",
+  gridBorderColorGuess: "#565758",
   gridColorNo: "#3a3a3c",
   gridBorderColorNo: "#3a3a3c",
   gridColorMaybe: "#b59f3b",
