@@ -2,6 +2,10 @@ import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 
+const NO = 0;
+const MAYBE = 1;
+const YES = 2;
+
 const GameGridContainer = styled.div`
   display: grid;
   grid-template-rows: repeat(${NUM_GUESSES}, 1fr);
@@ -30,17 +34,28 @@ const GridItem = styled.div`
   box-sizing: border-box;
   text-transform: uppercase;
   user-select: none;
-  border: 2px solid ${props => props.theme.gridBorderColor};
+  border: 2px solid ${(props) => props.theme.gridBorderColor};
 `;
 
-const GameGrid = () => {
+const GameGrid = (
+  guesses = [
+    [
+      { letter: "g", state: NO },
+      { letter: "u", state: YES },
+      { letter: "e", state: NO },
+      { letter: "e", state: MAYBE },
+      { letter: "e", state: NO },
+    ],
+  ]
+) => {
+  console.log(guesses);
   return (
     <GameGridContainer>
-      {[...Array(NUM_GUESSES)].map((row) => {
+      {[...Array(NUM_GUESSES)].map((row, index) => {
         return (
           <GridRow>
-            {[...Array(WORD_LENGTH)].map((item) => {
-              return <GridItem />;
+            {[...Array(WORD_LENGTH)].map((item, rowIndex) => {
+              return <GridItem>{guesses && guesses[index] && guesses[index][rowIndex]}</GridItem>
             })}
           </GridRow>
         );

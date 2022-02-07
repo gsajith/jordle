@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import {isLetter} from "../utils";
+import { isLetter } from "../utils";
 
 const KeyboardContainer = styled.div`
   height: 200px;
@@ -13,6 +13,7 @@ const Row = styled.div`
   width: 100%;
   margin: 0 auto 8px;
   touch-action: manipulation;
+  align-items: center;
 `;
 
 const Key = styled.button`
@@ -28,7 +29,7 @@ const Key = styled.button`
   color: ${(props) => props.theme.keyTextColor};
   -webkit-tap-highlight-color: ${(props) => props.theme.keyHighlightColor};
   flex: ${(props) => (props.largeButton ? 1.5 : 1)};
-  font-size: ${props => props.largeButton ? "12px" : "inherit"};
+  font-size: ${(props) => (props.largeButton ? "12px" : "inherit")};
   display: flex;
   justify-content: center;
   align-items: center;
