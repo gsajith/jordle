@@ -5,5 +5,12 @@ export const theme = {
   keyBackgroundColor: "#818384",
   keyTextColor: "#d7dadc",
   keyHighlightColor: "#0000004d",
-  gridBorderColor: "#3a3a3c"
+  gridBorderColor: "#3a3a3c",
+  gridBorderColorNo: "#3a3a3c",
+  gridBorderColorMaybe: "#b59f3b",
+  gridBorderColorYes: "#538d4e",
+  gridColor: "transparent",
+  gridColorNo: "#3a3a3c",
+  gridColorMaybe: "#b59f3b",
+  gridColorYes: "#538d4e",
 };

@@ -2,9 +2,10 @@ import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 
-const NO = 0;
-const MAYBE = 1;
-const YES = 2;
+const EMPTY = 0;
+const NO = 1;
+const MAYBE = 2;
+const YES = 3;
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -34,20 +35,50 @@ const GridItem = styled.div`
   box-sizing: border-box;
   text-transform: uppercase;
   user-select: none;
-  border: 2px solid ${(props) => props.theme.gridBorderColor};
+  border: 2px solid ${(props) => {
+    switch(props.state) {
+      case EMPTY:
+        return props.theme.gridBorderColor;
+      case NO:
+        return props.theme.gridBorderColorNo;
+      case YES:
+        return props.theme.gridBorderColorYes;
+      case MAYBE:
+        return props.theme.gridBorderColorMaybe;
+      default:
+        return props.theme.gridBorderColor;
+    }
+    return props.theme.gridBorderColor;
+  }};
+  background-color: ${(props) => {
+    switch(props.state) {
+      case EMPTY:
+        return props.theme.gridColor;
+      case NO:
+        return props.theme.gridColorNo;
+      case YES:
+        return props.theme.gridColorYes;
+      case MAYBE:
+        return props.theme.gridColorMaybe;
+      default:
+        return props.theme.gridColor;
+    }
+    return props.theme.gridColor;
+  }};
+  
 `;
 
-const GameGrid = (
-  guesses = [
-    [
-      { letter: "g", state: NO },
-      { letter: "u", state: YES },
-      { letter: "e", state: NO },
-      { letter: "e", state: MAYBE },
-      { letter: "e", state: NO },
-    ],
-  ]
-) => {
+const guesses = [
+  [
+    { letter: "g", state: NO },
+    { letter: "u", state: YES },
+    { letter: "e", state: NO },
+    { letter: "s", state: MAYBE },
+    { letter: "s", state: NO },
+  ],
+];
+
+const GameGrid = () => {
   console.log(guesses);
   return (
     <GameGridContainer>
@@ -55,7 +86,16 @@ const GameGrid = (
         return (
           <GridRow>
             {[...Array(WORD_LENGTH)].map((item, rowIndex) => {
-              return <GridItem>{guesses && guesses[index] && guesses[index][rowIndex]}</GridItem>
+              const letter =
+                guesses && guesses[index] && guesses[index][rowIndex].letter;
+              const state =
+                guesses && guesses[index] && guesses[index][rowIndex].state;
+
+              return (
+                <GridItem state={state}>
+                  {letter !== undefined && letter}
+                </GridItem>
+              );
             })}
           </GridRow>
         );
