@@ -87,7 +87,7 @@ const GameGrid = ({ guesses }) => {
                 guesses[index] &&
                 guesses[index].length > rowIndex &&
                 guesses[index][rowIndex].state;
-
+              
               return (
                 <GridItem state={state} key={"item" + row + " " + rowIndex}>
                   {letter !== undefined && letter}

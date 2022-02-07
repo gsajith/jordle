@@ -46,7 +46,7 @@ const KEYS = [
   ["enter", "z", "x", "c", "v", "b", "n", "m", "⏪"],
 ];
 
-export const Keyboard = () => {
+export const Keyboard = ({addGuessLetter, removeGuessLetter}) => {
   return (
     <KeyboardContainer>
       {KEYS.map((row, index) => {
@@ -55,7 +55,13 @@ export const Keyboard = () => {
             {index === 1 && <RowSpacer />}
             {row.map((key) => {
               return (
-                <Key key={key} largeButton={!isLetter(key)}>
+                <Key key={key} largeButton={!isLetter(key)} onClick={() => {
+                    if (isLetter(key)) {
+                      addGuessLetter(key);
+                    } else if (key !== "enter") {
+                      removeGuessLetter();
+                    }
+                  }}>
                   {key}
                 </Key>
               );

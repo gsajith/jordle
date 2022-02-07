@@ -32,9 +32,11 @@ export const Game = () => {
   const [numGuesses, setNumGuesses] = React.useState(0);
 
   const addGuessLetter = (letter) => {
+    console.log('add trigger');
     setGuesses((oldGuesses) => {
       const newGuesses = [...oldGuesses];
       if (newGuesses[numGuesses].length < WORD_LENGTH) {
+        console.log('push');
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
       return newGuesses;
@@ -51,21 +53,22 @@ export const Game = () => {
     });
   }
   
-  React.useEffect(() => {
-    setTimeout(() => {
-      addGuessLetter('a');
-      setTimeout(() => {
-        
-      }, 1000);
-    }, 1000);
-  }, []);
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     addGuessLetter('a');
+  //     addGuessLetter('c');
+  //     setTimeout(() => {
+  //       removeGuessLetter();
+  //     }, 1000);
+  //   }, 1000);
+  // }, []);
 
   return (
     <>
       <GameContainer>
-        <GameGrid guesses={guesses} />
+        <GameGrid guesses={guesses}/>
       </GameContainer>
-      <Keyboard />
+      <Keyboard  addGuessLetter={addGuessLetter} removeGuessLetter={removeGuessLetter}/>
     </>
   );
 };
