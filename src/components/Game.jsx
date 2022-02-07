@@ -54,6 +54,8 @@ export const Game = () => {
   
   React.useEffect(() => {
     answer.current = "lares";
+    const date = new Date(new Date().getFullYear(), 0, 0);
+    console.log(date.getTime());
   }, []);
 
   return (
