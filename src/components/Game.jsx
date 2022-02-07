@@ -32,20 +32,19 @@ export const Game = () => {
   const [numGuesses, setNumGuesses] = React.useState(0);
 
   const addGuessLetter = (letter) => {
-    console.log('add trigger');
     setGuesses((oldGuesses) => {
-      const newGuesses = [...oldGuesses];
+      const newGuesses = JSON.parse(JSON.stringify(oldGuesses))
       if (newGuesses[numGuesses].length < WORD_LENGTH) {
-        console.log('push');
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
+      console.log(newGuesses);
       return newGuesses;
     });
   };
   
   const removeGuessLetter = () => {
     setGuesses((oldGuesses) => {
-      const newGuesses = [...oldGuesses];
+      const newGuesses = JSON.parse(JSON.stringify(oldGuesses))
       if (newGuesses[numGuesses].length > 0) {
         newGuesses[numGuesses].pop();
       }

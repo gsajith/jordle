@@ -49,6 +49,9 @@ const KEYS = [
 export const Keyboard = ({addGuessLetter, removeGuessLetter}) => {
   return (
     <KeyboardContainer>
+      <input type="text" onKeyPress={(event) => {
+          console.log(event.key);
+        }}/>
       {KEYS.map((row, index) => {
         return (
           <Row key={"row" + index}>
