@@ -1,11 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
-
-const EMPTY = 0;
-const NO = 1;
-const MAYBE = 2;
-const YES = 3;
+import {EMPTY, NO, YES, MAYBE} from "./Game";
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -68,31 +64,20 @@ const GridItem = styled.div`
   
 `;
 
-const guesses = [
-  [
-    { letter: "g", state: NO },
-    { letter: "u", state: YES },
-    { letter: "e", state: NO },
-    { letter: "s", state: MAYBE },
-    { letter: "s", state: NO },
-  ],
-];
-
-const GameGrid = () => {
-  console.log(guesses);
+const GameGrid = ({guesses}) => {
   return (
     <GameGridContainer>
       {[...Array(NUM_GUESSES)].map((row, index) => {
         return (
-          <GridRow>
+          <GridRow key={"row"+index}>
             {[...Array(WORD_LENGTH)].map((item, rowIndex) => {
               const letter =
-                guesses && guesses[index] && guesses[index][rowIndex].letter;
+                guesses !== undefined && guesses[index] && guesses[index][rowIndex].letter;
               const state =
                 guesses && guesses[index] && guesses[index][rowIndex].state;
-
+              
               return (
-                <GridItem state={state}>
+                <GridItem state={state} key={"item" + row + " " + rowIndex}>
                   {letter !== undefined && letter}
                 </GridItem>
               );
