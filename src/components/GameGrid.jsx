@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import { EMPTY, GUESS, NO, YES, MAYBE } from "./Game";
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated, Transition, config } from 'react-spring'
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -70,31 +70,39 @@ const GridItem = styled.div`
 `;
 
 const GameGrid = ({ guesses }) => {
+  
   return (
     <GameGridContainer>
       {[...Array(NUM_GUESSES)].map((row, index) => {
         return (
           <GridRow key={"row" + index}>
-            {[...Array(WORD_LENGTH)].map((item, rowIndex) => {
-              const letter =
-                guesses &&
-                guesses.length > index &&
-                guesses[index] &&
-                guesses[index].length > rowIndex &&
-                guesses[index][rowIndex].letter;
-              const state =
-                guesses &&
-                guesses.length > index &&
-                guesses[index] &&
-                guesses[index].length > rowIndex &&
-                guesses[index][rowIndex].state;
-              
-              return (
-                <GridItem state={state} key={"item" + row + " " + rowIndex}>
-                  {letter !== undefined && letter}
+            <Transition
+              items={[...Array(WORD_LENGTH)].map((item, rowIndex) => {
+                const letter =
+                  guesses &&
+                  guesses.length > index &&
+                  guesses[index] &&
+                  guesses[index].length > rowIndex &&
+                  guesses[index][rowIndex].letter;
+                const state =
+                  guesses &&
+                  guesses.length > index &&
+                  guesses[index] &&
+                  guesses[index].length > rowIndex &&
+                  guesses[index][rowIndex].state;
+                return {letter, state};
+              })}
+              from={{opacity: 0}}
+              enter={{opacity: 1}}
+              leave={{opacity: 0}}
+              delay={200}
+              config={config.molasses}>
+              {({opacity}, item, index) => (
+                <GridItem state={item.state} key={"item" + row + " " + index}>
+                  {item.letter !== undefined && item.letter}
                 </GridItem>
-              );
-            })}
+              )}
+            </Transition>
           </GridRow>
         );
       })}
