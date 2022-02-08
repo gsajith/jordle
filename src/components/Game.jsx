@@ -320,7 +320,7 @@ export const Game = () => {
 
   return (
     <>
-      <GameEndPopup hideContainer={() => console.log('hide')}/>
+      <GameEndPopup gamesPlayed={gamesPlayed} gamesWon={gamesWon} currentStreak={currentStreak} maxStreak={maxStreak} hideContainer={() => console.log('hide')}/>
       <GameContainer>
         <GameGrid guesses={guesses} />
       </GameContainer>

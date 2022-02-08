@@ -71,16 +71,17 @@ const Label = styled.div`
 const GuessDistribution = styled.div`
   width: 80%;
   margin-bottom: 16px;
+  display: block;
 `;
 
 const GraphContainer = styled.div`
   width: 100%;
-  height: 20px;
+  height: 22px;
   display: flex;
   align-items: center;
-  padding-bottom: 4px;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 14px;
+  margin-bottom: 4px;
 `;
 
 const Graph = styled.div`
@@ -92,17 +93,20 @@ const Graph = styled.div`
 const GraphBar = styled.div`
   height: 100%;
   position: relative;
-  width: 0%;
+  width: 7%;
   background-color: ${props => props.theme.gridColorNo};
   display: flex;
-  justify-content: center;
+  justify-content: end;
+  font-weight: bold;
+  padding-right: 9px;
+  padding-top: 4px;
 `;
 
 export const GameEndPopup = ({
-  gamesPlayed,
-  gamesWon,
-  currentStreak,
-  maxStreak,
+  gamesPlayed = 0,
+  gamesWon = 0,
+  currentStreak = 0,
+  maxStreak = 0,
   guessDistribution,
   hideContainer,
   wonCurrent
@@ -120,25 +124,82 @@ export const GameEndPopup = ({
           <Title>STATISTICS</Title>
           <Statistics>
             <StatisticsContainer>
-              <Statistic>0</Statistic>
+              <Statistic>{gamesPlayed}</Statistic>
               <Label>Played</Label>
             </StatisticsContainer>
             <StatisticsContainer>
-              <Statistic>0</Statistic>
+              <Statistic>{gamesPlayed > 0 ? Math.floor((100*gamesWon)/gamesPlayed) : 0}</Statistic>
               <Label>Win %</Label>
             </StatisticsContainer>
             <StatisticsContainer>
-              <Statistic>0</Statistic>
+              <Statistic>{currentStreak}</Statistic>
               <Label>Current Streak</Label>
             </StatisticsContainer>
             <StatisticsContainer>
-              <Statistic>0</Statistic>
+              <Statistic>{maxStreak}</Statistic>
               <Label>Max Streak</Label>
             </StatisticsContainer>
           </Statistics>
           
           <Title>GUESS DISTRIBUTION</Title>
+        </div>
+        <div style={{display: "flex", justifyContent: "center", flexDirection: "column", width: "100%", alignItems: "center"}}>
           <GuessDistribution>
+            <GraphContainer>
+              <div>1</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+             <GraphContainer>
+              <div>2</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+             <GraphContainer>
+              <div>3</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+             <GraphContainer>
+              <div>4</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+             <GraphContainer>
+              <div>5</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+             <GraphContainer>
+              <div>6</div>
+              <Graph>
+                <GraphBar>
+                  0
+                </GraphBar>
+              </Graph>
+            </GraphContainer>
+            
+            
           </GuessDistribution>
         </div>
       </PopupContainer>
