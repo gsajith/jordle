@@ -5,6 +5,7 @@ import Keyboard from "./Keyboard";
 import GameGrid from "./GameGrid";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import wordlist from "../static/wordlist";
+import {xmur3} from "../utils";
 
 export const EMPTY = 0;
 export const GUESS = 1;
@@ -35,38 +36,53 @@ export const Game = () => {
 
   const addGuessLetter = (letter) => {
     setGuesses((oldGuesses) => {
-      const newGuesses = JSON.parse(JSON.stringify(oldGuesses))
+      const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
       if (newGuesses[numGuesses].length < WORD_LENGTH) {
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
       return newGuesses;
     });
   };
-  
+
   const removeGuessLetter = () => {
     setGuesses((oldGuesses) => {
-      const newGuesses = JSON.parse(JSON.stringify(oldGuesses))
+      const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
       if (newGuesses[numGuesses].length > 0) {
         newGuesses[numGuesses].pop();
       }
       return newGuesses;
     });
-  }
-  
+  };
+
   React.useEffect(() => {
     answer.current = "lares";
     const currentDate = new Date();
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()+1);
-    console.log(date.getTime());
-    console.log(wordlist.split("\n"));
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + 1
+    );
+    const dateIndex = Math.floor(date.getTime()/86400000);
+    console.log(dateIndex);
+    
+    const allWords = wordlist.split("\n").filter(word => word.length === WORD_LENGTH);
+    console.log(allWords);
+    
+    const selectedWord = allWords[dateIndex % allWords.length];
+    console.log(selectedWord);
+    
+    console.log(xmur3(allWords[0]))
   }, []);
 
   return (
     <>
       <GameContainer>
-        <GameGrid guesses={guesses}/>
+        <GameGrid guesses={guesses} />
       </GameContainer>
-      <Keyboard  addGuessLetter={addGuessLetter} removeGuessLetter={removeGuessLetter}/>
+      <Keyboard
+        addGuessLetter={addGuessLetter}
+        removeGuessLetter={removeGuessLetter}
+      />
     </>
   );
 };
