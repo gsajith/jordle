@@ -50,7 +50,7 @@ export const Game = () => {
   // TODO: X on wrong side, no shadow on mobile
 
   // ********************* PERSISTENT GAME STATE ******************** //
-  const [guesses, setGuesses] = useStickyState([[]], "guesses");
+  const [guesses, setGuesses] = useStickyState([], "guesses");
   const [numGuesses, setNumGuesses] = useStickyState(0, "numGuesses");
   const [answerFound, setAnswerFound] = useStickyState(false, "answerFound");
   const WORD_LIST_LENGTH = wordlist
@@ -120,7 +120,7 @@ export const Game = () => {
   }, []);
 
   const resetTodaysGame = React.useCallback(() => {
-    setGuesses([[]]);
+    setGuesses([]);
     if (answerFound) {
       setGamesPlayed((gamesPlayed) => gamesPlayed - 1);
       setGamesWon((gamesWon) => gamesWon - 1);
@@ -266,11 +266,13 @@ export const Game = () => {
   React.useEffect(() => {
     var lastGuess = 0;
     for(var i = 0; i < guesses.length; i++) {
-      if (guesses[i] && guesses[i][0] && guesses[i][0].state !== GUESS) {
-        lastGuess = i;
+      var isFullGuess = false;
+      if (guesses[i] && guesses[i].length === WORD_LENGTH && guesses[i][0].state === GUESS) {
+        isFullGuess = true;
       }
+      
     }
-    console.log("setting numGuesses to", lastGuess+1);
+    console.log('set to', lastGuess+1);
     setNumGuesses(lastGuess+1);
   }, [guesses]);
 
