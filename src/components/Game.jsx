@@ -48,11 +48,13 @@ export const Game = () => {
     "",
     "lastPlayedDate"
   );
+  const [lastWinDate, setLastWinDate] = useStickyState("", "lastWinDate");
 
   const [gamesPlayed, setGamesPlayed] = useStickyState(0, "gamesPlayed");
   const [gamesWon, setGamesWon] = useStickyState(0, "gamesWon");
   const [currentStreak, setCurrentStreak] = useStickyState(0, "currentStreak");
   const [maxStreak, setMaxStreak] = useStickyState(0, "maxStreak");
+  const [mostRecentStreak, setMostRecentStreak] = useStickyState(0, "mostRecentStreak");
   const [guessDistribution, setGuessDistribution] = useStickyState(
     new Array(NUM_GUESSES).fill(0),
     "guessDistribution"
@@ -61,10 +63,17 @@ export const Game = () => {
   const [errors, setErrors] = React.useState([]);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
+  const todaysDateString = React.useRef(0);
 
   const resetTodaysGame = React.useCallback(() => {
     setWordListLength(WORD_LIST_LENGTH);
     setGuesses([[]]);
+    if (answerFound) {
+      setGamesPlayed(gamesPlayed => gamesPlayed - 1);
+      setGamesWon(gamesWon => gamesWon - 1);
+      setCurrentStreak(currentStreak => currentStreak - 1);
+      setMostRecentStreak(mostRecentStreak => mostRecentStreak - 1);
+    }
     setNumGuesses(0);
     setAnswerFound(false);
   }, []);
@@ -73,26 +82,26 @@ export const Game = () => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
     setGamesWon((gamesWon) => gamesWon + 1);
     setCurrentStreak((currentStreak) => currentStreak + 1);
+    setMostRecentStreak((mostRecentStreak) => mostRecentStreak+1);
     setMaxStreak((maxStreak) => {
-      if (currentStreak > maxStreak) {
-        return currentStreak;
+      // TODO: Is this flaky / race condition?
+      if (currentStreak + 1 > maxStreak) {
+        return currentStreak + 1;
       }
       return maxStreak;
     });
     setGuessDistribution((oldGuessDistribution) => {
       const newGuessDistribution = [...oldGuessDistribution];
-      newGuessDistribution[numGuesses]++;
+      newGuessDistribution[numGuesses - 1]++;
       return newGuessDistribution;
     });
+    setLastWinDate(todaysDateString.current);
   }, []);
 
   const gameLost = React.useCallback(() => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
+    setMostRecentStreak(currentStreak);
     setCurrentStreak(0);
-  }, []);
-
-  React.useEffect(() => {
-    gameWon();
   }, []);
 
   const addGuessLetter = React.useCallback(
@@ -221,13 +230,13 @@ export const Game = () => {
       currentDate.getDate()
     );
 
-    const dateString =
+    todaysDateString.current =
       date.getFullYear() +
       date.getMonth().toString().padStart(2, "0") +
       date.getDate().toString().padStart(2, "0");
 
-    if (lastPlayedDate !== dateString) {
-      setLastPlayedDate(dateString);
+    if (lastPlayedDate !== todaysDateString.current) {
+      setLastPlayedDate(todaysDateString.current);
       resetTodaysGame();
     }
 
@@ -244,6 +253,12 @@ export const Game = () => {
     answer.current = selectedWord;
     console.log(selectedWord);
   }, []);
+  
+  React.useEffect(() => {
+    if (answerFound && lastWinDate !== todaysDateString.current) {
+      gameWon();
+    }
+  }, [answerFound]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+// If you change this word list, it will RESET everyones games from today
 const wordlist = `
 ACKEE
 ADOBO
