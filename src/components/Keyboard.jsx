@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { isLetter } from "../utils";
+import { EMPTY, GUESS, NO, YES, MAYBE } from "./Game";
 
 const KeyboardContainer = styled.div`
   height: 200px;
@@ -46,34 +47,57 @@ const KEYS = [
   ["enter", "z", "x", "c", "v", "b", "n", "m", "⏪"],
 ];
 
-export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess, guesses}) => {
-  const keyMap = React.useRef(null);
-  
+export const Keyboard = ({
+  addGuessLetter,
+  removeGuessLetter,
+  submitGuess,
+  guesses,
+}) => {
+  const [keyMap, setKeyMap] = React.useState({});
+
   React.useEffect(() => {
-    if (!keyMap.current) {
-      keyMap.current = KEYS.flat().map(key => {
-        return {}
-      })
+    const newKeyMap = {};
+    const flatArray = KEYS.flat().map((key) => {
+      return { key: key, state: EMPTY };
+    });
+    flatArray.forEach(
+      (arrayItem) => (newKeyMap[arrayItem.key] = arrayItem.state)
+    );
+
+    for (var i = 0; i < guesses.length; i++) {
+      if (guesses[i]) {
+        for (var j = 0; j < guesses[i].length; j++) {
+          if (typeof keyMap[guesses[i][j].letter] !== "undefined") {
+            newKeyMap[guesses[i][j].letter] = Math.max(guesses[i][j].state, keyMap[guesses[i][j].letter]);
+          } else {
+            newKeyMap[guesses[i][j].letter] = guesses[i][j].state;
+          }
+        }
+      }
     }
+    setKeyMap(newKeyMap);
   }, [guesses]);
-  
-  const keyPressed = React.useCallback((evt) => {
-    if (KEYS.some(row => row.includes(evt.key))) {
-      addGuessLetter(evt.key);
-    } else if (evt.key === "Backspace") {
-      removeGuessLetter();
-    } else if (evt.key === "Enter") {
-      submitGuess();
-    }
-  }, [addGuessLetter, removeGuessLetter, submitGuess]);
-  
+
+  const keyPressed = React.useCallback(
+    (evt) => {
+      if (KEYS.some((row) => row.includes(evt.key))) {
+        addGuessLetter(evt.key);
+      } else if (evt.key === "Backspace") {
+        removeGuessLetter();
+      } else if (evt.key === "Enter") {
+        submitGuess();
+      }
+    },
+    [addGuessLetter, removeGuessLetter, submitGuess]
+  );
+
   React.useEffect(() => {
     document.addEventListener("keydown", keyPressed);
     return () => {
       document.removeEventListener("keydown", keyPressed);
-    }
+    };
   }, [keyPressed]);
-  
+
   return (
     <KeyboardContainer>
       {KEYS.map((row, index) => {
@@ -82,7 +106,10 @@ export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess, guesse
             {index === 1 && <RowSpacer />}
             {row.map((key) => {
               return (
-                <Key key={key} largeButton={!isLetter(key)} onClick={() => {
+                <Key
+                  key={key}
+                  largeButton={!isLetter(key)}
+                  onClick={() => {
                     if (isLetter(key)) {
                       addGuessLetter(key);
                     } else if (key !== "enter") {
@@ -90,7 +117,8 @@ export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess, guesse
                     } else {
                       submitGuess();
                     }
-                  }}>
+                  }}
+                >
                   {key}
                 </Key>
               );
