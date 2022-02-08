@@ -71,7 +71,9 @@ const GridItem = styled.div`
 
 const GameGrid = ({ guesses }) => {
   
-  const transitions = useTransition()
+  const transitions = useTransition(guesses, {
+    from: item => 
+  })
   
   return (
     <GameGridContainer>
