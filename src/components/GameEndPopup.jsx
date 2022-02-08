@@ -102,6 +102,35 @@ const GraphBar = styled.div`
   padding-top: 4px;
 `;
 
+const CountdownContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid ${props => props.theme.textColor};
+  flex-grow: 1;
+  width: 50%;
+`;
+
+const ShareButton = styled.button`
+  background-color: ${props => props.theme.gridColorYes};
+  color: ${props => props.theme.textColor};
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  -webkit-tap-highlight-color: ${props => props.theme.keyHighlightColor};
+  height: 52px;
+  font-size: 20px;
+  -webkit-filter: brightness(100%0;)
+  flex-grow: 1;
+  width: calc(50% - 16px);
+  margin-left: 16px;
+`;
+
 export const GameEndPopup = ({
   gamesPlayed = 0,
   gamesWon = 0,
@@ -257,6 +286,13 @@ export const GameEndPopup = ({
               </Graph>
             </GraphContainer>
           </GuessDistribution>
+          <div style={{width: "100%", padding: "0px 16px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <CountdownContainer>
+              <Title style={{marginBottom: 0, marginTop: 16}}>NEXT WORDLE</Title>
+              <Statistic>21:41:19</Statistic>
+            </CountdownContainer>
+            <ShareButton>SHARE</ShareButton>
+          </div>
         </div>
       </PopupContainer>
     </PopupOverlay>
