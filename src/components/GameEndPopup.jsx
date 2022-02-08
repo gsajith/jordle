@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import {timeTilTomorrow} from "../utils";
 
 const PopupContainer = styled.div`
   color: ${(props) => props.theme.textColor};
@@ -94,7 +95,8 @@ const GraphBar = styled.div`
   height: 100%;
   position: relative;
   width: 7%;
-  background-color: ${(props) => props.current ? props.theme.gridColorYes : props.theme.gridColorNo};
+  background-color: ${(props) =>
+    props.current ? props.theme.gridColorYes : props.theme.gridColorNo};
   display: flex;
   justify-content: end;
   font-weight: bold;
@@ -105,14 +107,15 @@ const GraphBar = styled.div`
 const CountdownContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-right: 1px solid ${props => props.theme.textColor};
+  border-right: 1px solid ${(props) => props.theme.textColor};
   flex-grow: 1;
   width: 50%;
+  padding-right: 16px;
 `;
 
 const ShareButton = styled.button`
-  background-color: ${props => props.theme.gridColorYes};
-  color: ${props => props.theme.textColor};
+  background-color: ${(props) => props.theme.gridColorYes};
+  color: ${(props) => props.theme.textColor};
   font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
@@ -122,13 +125,13 @@ const ShareButton = styled.button`
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
-  -webkit-tap-highlight-color: ${props => props.theme.keyHighlightColor};
+  -webkit-tap-highlight-color: ${(props) => props.theme.keyHighlightColor};
   height: 52px;
   font-size: 20px;
   -webkit-filter: brightness(100%0;)
   flex-grow: 1;
-  width: calc(50% - 16px);
-  margin-left: 16px;
+  width: calc(50% - 32px);
+  margin-left: 32px;
 `;
 
 export const GameEndPopup = ({
@@ -141,6 +144,15 @@ export const GameEndPopup = ({
   currentWinNumGuesses,
 }) => {
   const maxNumGuesses = Math.max(...guessDistribution);
+  const [countdown, setCountdown ] = React.useState(timeTilTomorrow());
+  
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown(timeTilTomorrow());
+      console.log('tick', timeTilTomorrow());
+    }, 1000);
+    return () => {clearInterval(interval);}
+  }, []);
 
   return (
     <PopupOverlay onClick={hideContainer}>
@@ -196,6 +208,7 @@ export const GameEndPopup = ({
             flexDirection: "column",
             width: "100%",
             alignItems: "center",
+            marginBottom: 16,
           }}
         >
           <GuessDistribution>
@@ -203,7 +216,7 @@ export const GameEndPopup = ({
               <div>1</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===1}
+                  current={currentWinNumGuesses === 1}
                   style={{
                     width:
                       guessDistribution[0] === 0
@@ -220,13 +233,16 @@ export const GameEndPopup = ({
               <div>2</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===2}
+                  current={currentWinNumGuesses === 2}
                   style={{
                     width:
                       guessDistribution[1] === 0
                         ? "7%"
                         : (100 * guessDistribution[1]) / maxNumGuesses + "%",
-                  }}>{guessDistribution[1]}</GraphBar>
+                  }}
+                >
+                  {guessDistribution[1]}
+                </GraphBar>
               </Graph>
             </GraphContainer>
 
@@ -234,13 +250,16 @@ export const GameEndPopup = ({
               <div>3</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===3}
+                  current={currentWinNumGuesses === 3}
                   style={{
                     width:
                       guessDistribution[2] === 0
                         ? "7%"
                         : (100 * guessDistribution[2]) / maxNumGuesses + "%",
-                  }}>{guessDistribution[2]}</GraphBar>
+                  }}
+                >
+                  {guessDistribution[2]}
+                </GraphBar>
               </Graph>
             </GraphContainer>
 
@@ -248,13 +267,16 @@ export const GameEndPopup = ({
               <div>4</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===4}
+                  current={currentWinNumGuesses === 4}
                   style={{
                     width:
                       guessDistribution[3] === 0
                         ? "7%"
                         : (100 * guessDistribution[3]) / maxNumGuesses + "%",
-                  }}>{guessDistribution[3]}</GraphBar>
+                  }}
+                >
+                  {guessDistribution[3]}
+                </GraphBar>
               </Graph>
             </GraphContainer>
 
@@ -262,13 +284,16 @@ export const GameEndPopup = ({
               <div>5</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===5}
+                  current={currentWinNumGuesses === 5}
                   style={{
                     width:
                       guessDistribution[4] === 0
                         ? "7%"
                         : (100 * guessDistribution[4]) / maxNumGuesses + "%",
-                  }}>{guessDistribution[4]}</GraphBar>
+                  }}
+                >
+                  {guessDistribution[4]}
+                </GraphBar>
               </Graph>
             </GraphContainer>
 
@@ -276,20 +301,34 @@ export const GameEndPopup = ({
               <div>6</div>
               <Graph>
                 <GraphBar
-                  current={currentWinNumGuesses===6}
+                  current={currentWinNumGuesses === 6}
                   style={{
                     width:
                       guessDistribution[5] === 0
                         ? "7%"
                         : (100 * guessDistribution[5]) / maxNumGuesses + "%",
-                  }}>{guessDistribution[5]}</GraphBar>
+                  }}
+                >
+                  {guessDistribution[5]}
+                </GraphBar>
               </Graph>
             </GraphContainer>
           </GuessDistribution>
-          <div style={{width: "100%", padding: "0px 16px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <div
+            style={{
+              width: "100%",
+              padding: "0px 16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 8,
+            }}
+          >
             <CountdownContainer>
-              <Title style={{marginBottom: 0, marginTop: 16}}>NEXT WORDLE</Title>
-              <Statistic>21:41:19</Statistic>
+              <Title style={{ marginBottom: 0, marginTop: 16 }}>
+                NEXT WORDLE
+              </Title>
+              <Statistic>{timeTilTomorrow()}</Statistic>
             </CountdownContainer>
             <ShareButton>SHARE</ShareButton>
           </div>

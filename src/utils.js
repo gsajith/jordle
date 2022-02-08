@@ -53,3 +53,28 @@ export const useStickyState = (defaultValue, key) => {
   }, [key, value]);
   return [value, setValue];
 }
+
+// Adapted from
+// https://stackoverflow.com/questions/19700283/how-to-convert-time-in-milliseconds-to-hours-min-sec-format-in-javascript
+// and https://helperbyte.com/questions/429672/how-to-get-number-of-milliseconds-until-tomorrow
+export const timeTilTomorrow = () => {
+  const d = new Date();
+  const currentTimestamp = d.getTime();
+  d.setDate(d.getDate() + 1);
+  d.setHours(0);
+  d.setMinutes(0);
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  const timeDiffMillis =  d.getTime() - currentTimestamp;
+  
+   var milliseconds = Math.floor((timeDiffMillis % 1000) / 100),
+    seconds = Math.floor((timeDiffMillis / 1000) % 60),
+    minutes = Math.floor((timeDiffMillis / (1000 * 60)) % 60),
+    hours = Math.floor((timeDiffMillis / (1000 * 60 * 60)) % 24);
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds;
+}

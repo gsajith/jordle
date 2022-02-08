@@ -81,6 +81,7 @@ export const Game = () => {
   // ******************** END PERSISTENT GAME STATE ***************** //
 
   const [errors, setErrors] = React.useState([]);
+  const [gameEndPopupShown, setGameEndPopupShown] = React.useState(false);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
   const todaysDateString = React.useRef(0);
@@ -315,19 +316,24 @@ export const Game = () => {
     ) {
       gameLost();
     }
+    if (answerFound || numGuesses === NUM_GUESSES) {
+      setGameEndPopupShown(true);
+    }
   }, [answerFound, numGuesses]);
 
   return (
     <>
-      <GameEndPopup
-        gamesPlayed={gamesPlayed}
-        gamesWon={gamesWon}
-        currentStreak={currentStreak}
-        maxStreak={maxStreak}
-        hideContainer={() => console.log("hide")}
-        guessDistribution={guessDistribution}
-        currentWinNumGuesses={answerFound ? numGuesses : 0}
-      />
+      {gameEndPopupShown && (
+        <GameEndPopup
+          gamesPlayed={gamesPlayed}
+          gamesWon={gamesWon}
+          currentStreak={currentStreak}
+          maxStreak={maxStreak}
+          hideContainer={() => setGameEndPopupShown(false)}
+          guessDistribution={guessDistribution}
+          currentWinNumGuesses={answerFound ? numGuesses : 0}
+        />
+      )}
       <GameContainer>
         <GameGrid guesses={guesses} />
       </GameContainer>
