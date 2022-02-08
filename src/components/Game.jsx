@@ -55,6 +55,7 @@ export const Game = () => {
   const [currentStreak, setCurrentStreak] = useStickyState(0, "currentStreak");
   const [maxStreak, setMaxStreak] = useStickyState(0, "maxStreak");
   const [mostRecentStreak, setMostRecentStreak] = useStickyState(0, "mostRecentStreak");
+  const [currentStreakIsMax, setCurrentStreakIsMax] = useStickyState(false, "currentStreakIsMax");
   const [guessDistribution, setGuessDistribution] = useStickyState(
     new Array(NUM_GUESSES).fill(0),
     "guessDistribution"
@@ -68,11 +69,28 @@ export const Game = () => {
   const resetTodaysGame = React.useCallback(() => {
     setWordListLength(WORD_LIST_LENGTH);
     setGuesses([[]]);
+    console.log("resetting");
     if (answerFound) {
       setGamesPlayed(gamesPlayed => gamesPlayed - 1);
       setGamesWon(gamesWon => gamesWon - 1);
       setCurrentStreak(currentStreak => currentStreak - 1);
       setMostRecentStreak(mostRecentStreak => mostRecentStreak - 1);
+      if (currentStreakIsMax) {
+        setMaxStreak(maxStreak => maxStreak - 1);
+      }
+      setGuessDistribution((oldGuessDistribution) => {
+        const newGuessDistribution = [...oldGuessDistribution];
+        newGuessDistribution[numGuesses - 1]++;
+        return newGuessDistribution;
+      })
+      setLastWinDate("");
+    } else if (numGuesses === NUM_GUESSES) {
+      setGamesPlayed(gamesPlayed => gamesPlayed - 1);
+      setCurrentStreak(mostRecentStreak)
+      if (mostRecentStreak >= maxStreak) {
+        setMaxStreak(mostRecentStreak);
+        setCurrentStreakIsMax(true);
+      }
     }
     setNumGuesses(0);
     setAnswerFound(false);
@@ -86,17 +104,19 @@ export const Game = () => {
     setMaxStreak((maxStreak) => {
       // TODO: Is this flaky / race condition?
       if (currentStreak + 1 > maxStreak) {
+        setCurrentStreakIsMax(true);
         return currentStreak + 1;
       }
+      setCurrentStreakIsMax(false);
       return maxStreak;
     });
     setGuessDistribution((oldGuessDistribution) => {
       const newGuessDistribution = [...oldGuessDistribution];
-      newGuessDistribution[numGuesses - 1]++;
+      newGuessDistribution[numGuesses]++;
       return newGuessDistribution;
     });
     setLastWinDate(todaysDateString.current);
-  }, []);
+  }, [numGuesses]);
 
   const gameLost = React.useCallback(() => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
@@ -209,7 +229,10 @@ export const Game = () => {
 
               return newGuesses;
             });
-            setNumGuesses((oldNumGuesses) => oldNumGuesses + 1);
+            setNumGuesses((oldNumGuesses) => {
+              console.log(oldNumGuesses + 1);
+              return oldNumGuesses+1;
+            });
           } else {
             // Error: Guess not in word list
             triggerError("Not in word list");
