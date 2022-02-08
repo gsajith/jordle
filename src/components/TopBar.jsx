@@ -19,6 +19,7 @@ const TopBarContainer = styled.div`
   border-bottom-color: ${props => props.theme.borderColor};
   height: 50px;
   justify-content: space-between;
+  user-select: none;
 `;
 
 export const TopBar = () => {

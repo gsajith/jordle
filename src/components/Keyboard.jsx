@@ -46,7 +46,7 @@ const KEYS = [
   ["enter", "z", "x", "c", "v", "b", "n", "m", "⏪"],
 ];
 
-export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess}) => {
+export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess, guesses}) => {
   const keyPressed = React.useCallback((evt) => {
     if (KEYS.some(row => row.includes(evt.key))) {
       addGuessLetter(evt.key);

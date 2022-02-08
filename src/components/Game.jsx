@@ -42,8 +42,12 @@ export const ToastContainer = styled.div`
 `;
 
 export const Game = () => {
+  // TODO: Fix glitch where it shows wrong guess # on mobile vs desktop
   // TODO: Show persistent answer if all 6 guesses used up
   // TODO: Show guess state in keyboard
+  // TODO: Show "Shared" toast in popup
+  // TODO: Share output with link
+  
 
   // ********************* PERSISTENT GAME STATE ******************** //
   const [guesses, setGuesses] = useStickyState([[]], "guesses");

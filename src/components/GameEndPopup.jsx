@@ -17,6 +17,8 @@ const PopupContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 500px;
+  z-index: 3001;
+  user-select: none;
 `;
 
 const PopupOverlay = styled.div`
@@ -156,7 +158,9 @@ export const GameEndPopup = ({
 
   return (
     <PopupOverlay onClick={hideContainer}>
-      <PopupContainer>
+      <PopupContainer onClick={(e) => {
+          e.stopPropagation();
+        }}>
         <div
           style={{
             display: "flex",
