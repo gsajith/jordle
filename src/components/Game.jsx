@@ -4,6 +4,7 @@ import { TITLE } from "../static/globals";
 import Keyboard from "./Keyboard";
 import GameGrid from "./GameGrid";
 import Toast from "./Toast";
+import GameEndPopup from "./GameEndPopup";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import wordlist from "../static/wordlist";
 import { getSeededRand, shuffle, useStickyState } from "../utils";
@@ -319,6 +320,7 @@ export const Game = () => {
 
   return (
     <>
+      <GameEndPopup hideContainer={() => console.log('hide')}/>
       <GameContainer>
         <GameGrid guesses={guesses} />
       </GameContainer>
