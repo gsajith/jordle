@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import {timeTilTomorrow} from "../utils";
+import { timeTilTomorrow } from "../utils";
 
 const PopupContainer = styled.div`
   color: ${(props) => props.theme.textColor};
@@ -8,7 +8,7 @@ const PopupContainer = styled.div`
   border-radius: 8px;
   padding: 16px;
   width: 90%;
-  box-shadow: 0 4px 23px 0 rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 50%);
   max-height: 90%;
   overflow-y: auto;
   box-sizing: border-box;
@@ -100,7 +100,7 @@ const GraphBar = styled.div`
   background-color: ${(props) =>
     props.current ? props.theme.gridColorYes : props.theme.gridColorNo};
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   font-weight: bold;
   padding-right: 9px;
   padding-top: 4px;
@@ -146,25 +146,28 @@ export const GameEndPopup = ({
   currentWinNumGuesses,
 }) => {
   const maxNumGuesses = Math.max(...guessDistribution);
-  const [countdown, setCountdown ] = React.useState(timeTilTomorrow());
-  
+  const [countdown, setCountdown] = React.useState(timeTilTomorrow());
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCountdown(timeTilTomorrow());
-      console.log('tick', timeTilTomorrow());
     }, 1000);
-    return () => {clearInterval(interval);}
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
     <PopupOverlay onClick={hideContainer}>
-      <PopupContainer onClick={(e) => {
+      <PopupContainer
+        onClick={(e) => {
           e.stopPropagation();
-        }}>
+        }}
+      >
         <div
           style={{
             display: "flex",
-            justifyContent: "end",
+            justifyContent: "flex-end",
             padding: 4,
             width: "100%",
           }}
@@ -217,18 +220,25 @@ export const GameEndPopup = ({
         >
           <GuessDistribution>
             {guessDistribution.map((guess, index) => {
-              return (<GraphContainer>
-                  <div>{index+1}</div>
+              return (
+                <GraphContainer key={"distrib" + index}>
+                  <div>{index + 1}</div>
                   <Graph>
                     <GraphBar
-                      current={currentWinNumGuesses === (index+1)}
+                      current={currentWinNumGuesses === index + 1}
                       style={{
-                        width: guessDistribution[index] === 0 ? "7%" : (100 * guessDistribution[index])/maxNumGuesses + "%",
-                      }}>
+                        width:
+                          guessDistribution[index] === 0
+                            ? "7%"
+                            : (100 * guessDistribution[index]) / maxNumGuesses +
+                              "%",
+                      }}
+                    >
                       {guessDistribution[index]}
                     </GraphBar>
                   </Graph>
-                </GraphContainer>);
+                </GraphContainer>
+              );
             })}
           </GuessDistribution>
           <div

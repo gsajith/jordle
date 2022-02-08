@@ -47,6 +47,16 @@ const KEYS = [
 ];
 
 export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess, guesses}) => {
+  const keyMap = React.useRef(null);
+  
+  React.useEffect(() => {
+    if (!keyMap.current) {
+      keyMap.current = KEYS.flat().map(key => {
+        return {}
+      })
+    }
+  }, [guesses]);
+  
   const keyPressed = React.useCallback((evt) => {
     if (KEYS.some(row => row.includes(evt.key))) {
       addGuessLetter(evt.key);
