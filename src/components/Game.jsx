@@ -49,6 +49,7 @@ export const Game = () => {
     "lastPlayedDate"
   );
   const [lastWinDate, setLastWinDate] = useStickyState("", "lastWinDate");
+  const [lastLossDate, setLastLossDate] = useStickyState("", "lastLossDate");
 
   const [gamesPlayed, setGamesPlayed] = useStickyState(0, "gamesPlayed");
   const [gamesWon, setGamesWon] = useStickyState(0, "gamesWon");
@@ -69,7 +70,6 @@ export const Game = () => {
   const resetTodaysGame = React.useCallback(() => {
     setWordListLength(WORD_LIST_LENGTH);
     setGuesses([[]]);
-    console.log("resetting");
     if (answerFound) {
       setGamesPlayed(gamesPlayed => gamesPlayed - 1);
       setGamesWon(gamesWon => gamesWon - 1);
@@ -80,11 +80,12 @@ export const Game = () => {
       }
       setGuessDistribution((oldGuessDistribution) => {
         const newGuessDistribution = [...oldGuessDistribution];
-        newGuessDistribution[numGuesses - 1]++;
+        newGuessDistribution[numGuesses-1]--;
         return newGuessDistribution;
       })
       setLastWinDate("");
     } else if (numGuesses === NUM_GUESSES) {
+      console.log("resetting here");
       setGamesPlayed(gamesPlayed => gamesPlayed - 1);
       setCurrentStreak(mostRecentStreak)
       if (mostRecentStreak >= maxStreak) {
@@ -94,7 +95,7 @@ export const Game = () => {
     }
     setNumGuesses(0);
     setAnswerFound(false);
-  }, []);
+  }, [numGuesses]);
 
   const gameWon = React.useCallback(() => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
@@ -122,6 +123,7 @@ export const Game = () => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
     setMostRecentStreak(currentStreak);
     setCurrentStreak(0);
+    setLastLossDate(todaysDateString.current);
   }, []);
 
   const addGuessLetter = React.useCallback(
@@ -262,6 +264,11 @@ export const Game = () => {
       setLastPlayedDate(todaysDateString.current);
       resetTodaysGame();
     }
+    
+    if (wordListLength !== WORD_LIST_LENGTH) {
+      setWordListLength(WORD_LIST_LENGTH);
+      resetTodaysGame();
+    }
 
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
@@ -280,8 +287,10 @@ export const Game = () => {
   React.useEffect(() => {
     if (answerFound && lastWinDate !== todaysDateString.current) {
       gameWon();
+    } else if (!answerFound && numGuesses === NUM_GUESSES && lastLossDate !== todaysDateString.current) {
+      gameLost();
     }
-  }, [answerFound]);
+  }, [answerFound, numGuesses]);
 
   return (
     <>
