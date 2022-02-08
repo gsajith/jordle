@@ -73,20 +73,35 @@ export const Game = () => {
             // If they guessed a valid word, check each letter
             setGuesses(oldGuesses => {
               const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-              const guessRow = newGuesses[numGuesses];
+              const guessRow = newGuesses[numGuesses].map(obj => {
+                return {letter: obj.letter.toUpperCase(), state: obj.state};
+              });
+              const answerRow = answer.current.split('').map(letter => letter.toUpperCase());
+              
+              // Give priority to highlighting fully correct characters
               for(var i = 0; i < guessRow.length; i++) {
-                if (guessRow[i].letter.toUpperCase() === answer.current.charAt(i).toUpperCase()) {
+                if (guessRow[i].letter === answerRow[i]) {
                   guessRow[i].state = YES;
-                } else if (answer.current.toUpperCase().indexOf(guessRow[i].letter.toUpperCase()) !== -1) {
-                  guessRow[i].state = MAYBE;
-                } else {
-                  guessRow[i].state = NO;
+                  answerRow[i] = "";
                 }
               }
+              
+              // Do a secondary loop to highlight slightly correct characters
+              for(var i = 0; i < guessRow.length; i++) {
+                if (answerRow.includes(guessRow[i].letter)) {
+                  guessRow[i].state = MAYBE;
+                  answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
+                } else {
+                  if (guessRow[i].state === GUESS) {
+                    guessRow[i].state = NO;
+                  }
+                }
+              }
+              
               newGuesses[numGuesses] = guessRow;
               
               // Stop the game if answer found
-              if (guessRow.map(obj => obj.letter).join('').toUpperCase() === answer.current.toUpperCase()) {
+              if (guessRow.map(obj => obj.letter).join('') === answer.current.toUpperCase()) {
                 setAnswerFound(true);
               }
               
@@ -132,7 +147,6 @@ export const Game = () => {
         removeGuessLetter={removeGuessLetter}
         submitGuess={submitGuess}
       />
-      {answerFound ? <div>Answer found</div> : <div> answer not found</div>}
     </>
   );
 };

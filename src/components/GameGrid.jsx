@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import { EMPTY, GUESS, NO, YES, MAYBE } from "./Game";
+import { useSpring, animated } from 'react-spring'
 
 const GameGridContainer = styled.div`
   display: grid;
