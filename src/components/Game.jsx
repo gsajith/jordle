@@ -172,6 +172,7 @@ export const Game = () => {
     const selectedWord = shuffledWordList[dateIndex % shuffledWordList.length];
 
     answer.current = selectedWord;
+    console.log(selectedWord);
   }, []);
 
   return (
