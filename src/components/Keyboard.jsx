@@ -47,20 +47,22 @@ const KEYS = [
 ];
 
 export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess}) => {
-  const keyPressed = (evt) => {
+  const keyPressed = React.useCallback((evt) => {
     if (KEYS.some(row => row.includes(evt.key))) {
       addGuessLetter(evt.key);
     }
     if (evt.key === "Backspace") {
       removeGuessLetter();
     }
-  }
+  }, [addGuessLetter, removeGuessLetter]);
+  
   React.useEffect(() => {
     document.addEventListener("keydown", keyPressed);
     return () => {
       document.removeEventListener("keydown", keyPressed);
     }
-  }, []);
+  }, [keyPressed]);
+  
   return (
     <KeyboardContainer>
       {KEYS.map((row, index) => {

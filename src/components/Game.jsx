@@ -34,7 +34,7 @@ export const Game = () => {
   const [numGuesses, setNumGuesses] = React.useState(0);
   const answer = React.useRef(null);
 
-  const addGuessLetter = (letter) => {
+  const addGuessLetter = React.useCallback((letter) => {
     setGuesses((oldGuesses) => {
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
       if (guesses[numGuesses] && newGuesses[numGuesses].length < WORD_LENGTH) {
@@ -42,27 +42,35 @@ export const Game = () => {
       }
       return newGuesses;
     });
-  };
+  }, [numGuesses]);
 
-  const removeGuessLetter = () => {
+  const removeGuessLetter = React.useCallback(() => {
     setGuesses((oldGuesses) => {
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-      if (guesses[numGuesses] && newGuesses[numGuesses].length > 0) {
+      if (newGuesses[numGuesses] && newGuesses[numGuesses].length > 0) {
         newGuesses[numGuesses].pop();
       }
       return newGuesses;
     });
-  };
+  }, [numGuesses]);
   
-  const submitGuess = () => {
+  const submitGuess = React.useCallback(() => {
     if (numGuesses < NUM_GUESSES) {
-      // TODO: Check if valid guess
-      if (guesses[numGuesses] && guesses[numGuesses].length === WORD_LENGTH) {
-        setNumGuesses(oldNumGuesses => oldNumGuesses+1);
+      if (guesses[numGuesses]) {
+        if (guesses[numGuesses].length === WORD_LENGTH) {
+          // TODO: Check if valid guess
+          const guess = guesses[numGuesses].map(obj => obj.letter).join('');
+          if (wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
+            setNumGuesses(oldNumGuesses => oldNumGuesses+1);
+          } else {
+            // TODO: Error not in word list
+          }
+        } else {
+          // TODO: Error not enough letters
+        }
       }
-      console.log("guess length: " + guesses[numGuesses].length);
     }
-  }
+  }, [numGuesses]);
 
   React.useEffect(() => {
     const currentDate = new Date();
