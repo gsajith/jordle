@@ -216,107 +216,20 @@ export const GameEndPopup = ({
           }}
         >
           <GuessDistribution>
-            <GraphContainer>
-              <div>1</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 1}
-                  style={{
-                    width:
-                      guessDistribution[0] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[0]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[0]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
-
-            <GraphContainer>
-              <div>2</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 2}
-                  style={{
-                    width:
-                      guessDistribution[1] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[1]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[1]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
-
-            <GraphContainer>
-              <div>3</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 3}
-                  style={{
-                    width:
-                      guessDistribution[2] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[2]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[2]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
-
-            <GraphContainer>
-              <div>4</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 4}
-                  style={{
-                    width:
-                      guessDistribution[3] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[3]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[3]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
-
-            <GraphContainer>
-              <div>5</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 5}
-                  style={{
-                    width:
-                      guessDistribution[4] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[4]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[4]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
-
-            <GraphContainer>
-              <div>6</div>
-              <Graph>
-                <GraphBar
-                  current={currentWinNumGuesses === 6}
-                  style={{
-                    width:
-                      guessDistribution[5] === 0
-                        ? "7%"
-                        : (100 * guessDistribution[5]) / maxNumGuesses + "%",
-                  }}
-                >
-                  {guessDistribution[5]}
-                </GraphBar>
-              </Graph>
-            </GraphContainer>
+            {guessDistribution.map((guess, index) => {
+              return (<GraphContainer>
+                  <div>{index+1}</div>
+                  <Graph>
+                    <GraphBar
+                      current={currentWinNumGuesses === (index+1)}
+                      style={{
+                        width: guessDistribution[index] === 0 ? "7%" : (100 * guessDistribution[index])/maxNumGuesses + "%",
+                      }}>
+                      {guessDistribution[index]}
+                    </GraphBar>
+                  </Graph>
+                </GraphContainer>);
+            })}
           </GuessDistribution>
           <div
             style={{

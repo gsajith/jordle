@@ -43,13 +43,11 @@ export const ToastContainer = styled.div`
 
 export const Game = () => {
   // TODO: Fix glitch where it shows wrong guess # on mobile vs desktop
-  // TODO: Genearlize results page for # of guesses
   // TODO: Show persistent answer if all 6 guesses used up
   // TODO: Show guess state in keyboard
   // TODO: Show "Shared" toast in popup
   // TODO: Share output with link
   // TODO: X on wrong side, no shadow on mobile
-  
 
   // ********************* PERSISTENT GAME STATE ******************** //
   const [guesses, setGuesses] = useStickyState([[]], "guesses");
@@ -204,70 +202,65 @@ export const Game = () => {
   }, []);
 
   const submitGuess = React.useCallback(() => {
-    if (numGuesses < NUM_GUESSES) {
-      if (guesses[numGuesses]) {
-        if (guesses[numGuesses].length === WORD_LENGTH) {
-          const guess = guesses[numGuesses].map((obj) => obj.letter).join("");
-          if (
-            wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())
-          ) {
-            // If they guessed a valid word, check each letter
-            setGuesses((oldGuesses) => {
-              const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-              const guessRow = newGuesses[numGuesses].map((obj) => {
-                return { letter: obj.letter.toUpperCase(), state: obj.state };
-              });
-              const answerRow = answer.current
-                .split("")
-                .map((letter) => letter.toUpperCase());
+    if (numGuesses < NUM_GUESSES && guesses[numGuesses]) {
+      if (guesses[numGuesses].length < WORD_LENGTH) {
+        // Error: Not enough letters in guess
+        triggerError("Not enough letters");
+      } else if (guesses[numGuesses].length === WORD_LENGTH) {
+        const guess = guesses[numGuesses].map((obj) => obj.letter).join("");
+        if (wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
+          // If they guessed a valid word, check each letter
+          setGuesses((oldGuesses) => {
+            const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
+            const guessRow = newGuesses[numGuesses].map((obj) => {
+              return { letter: obj.letter.toUpperCase(), state: obj.state };
+            });
+            const answerRow = answer.current
+              .split("")
+              .map((letter) => letter.toUpperCase());
 
-              // Give priority to highlighting fully correct characters
-              for (var i = 0; i < guessRow.length; i++) {
-                if (guessRow[i].letter === answerRow[i]) {
-                  guessRow[i].state = YES;
-                  answerRow[i] = "";
+            // Give priority to highlighting fully correct characters
+            for (var i = 0; i < guessRow.length; i++) {
+              if (guessRow[i].letter === answerRow[i]) {
+                guessRow[i].state = YES;
+                answerRow[i] = "";
+              }
+            }
+
+            // Do a secondary loop to highlight slightly correct characters
+            for (var i = 0; i < guessRow.length; i++) {
+              if (answerRow.includes(guessRow[i].letter)) {
+                if (guessRow[i].state === GUESS) {
+                  guessRow[i].state = MAYBE;
+                  answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
+                }
+              } else {
+                if (guessRow[i].state === GUESS) {
+                  guessRow[i].state = NO;
                 }
               }
+            }
 
-              // Do a secondary loop to highlight slightly correct characters
-              for (var i = 0; i < guessRow.length; i++) {
-                if (answerRow.includes(guessRow[i].letter)) {
-                  if (guessRow[i].state === GUESS) {
-                    guessRow[i].state = MAYBE;
-                    answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
-                  }
-                } else {
-                  if (guessRow[i].state === GUESS) {
-                    guessRow[i].state = NO;
-                  }
-                }
-              }
+            newGuesses[numGuesses] = guessRow;
 
-              newGuesses[numGuesses] = guessRow;
+            // Stop the game if answer found
+            if (
+              guessRow.map((obj) => obj.letter).join("") ===
+              answer.current.toUpperCase()
+            ) {
+              setAnswerFound(true);
+            }
 
-              // Stop the game if answer found
-              if (
-                guessRow.map((obj) => obj.letter).join("") ===
-                answer.current.toUpperCase()
-              ) {
-                setAnswerFound(true);
-              }
-
-              return newGuesses;
-            });
-            setNumGuesses((oldNumGuesses) => {
-              console.log(oldNumGuesses + 1);
-              return oldNumGuesses + 1;
-            });
-          } else {
-            // Error: Guess not in word list
-            triggerError("Not in word list");
-          }
+            return newGuesses;
+          });
+          setNumGuesses((oldNumGuesses) => {
+            return oldNumGuesses + 1;
+          });
         } else {
-          // Error: Not enough letters in guess
-          triggerError("Not enough letters");
+          // Error: Guess not in word list
+          triggerError("Not in word list");
         }
-      }
+      } 
     }
   }, [numGuesses, guesses]);
 
