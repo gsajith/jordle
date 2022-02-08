@@ -5,7 +5,7 @@ import Keyboard from "./Keyboard";
 import GameGrid from "./GameGrid";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import wordlist from "../static/wordlist";
-import {xmur3} from "../utils";
+import {getSeededRand, shuffle} from "../utils";
 
 export const EMPTY = 0;
 export const GUESS = 1;
@@ -68,10 +68,11 @@ export const Game = () => {
     const allWords = wordlist.split("\n").filter(word => word.length === WORD_LENGTH);
     console.log(allWords);
     
-    const selectedWord = allWords[dateIndex % allWords.length];
-    console.log(selectedWord);
+    const seededRand = getSeededRand(allWords[0]);
+    const shuffledWordList = shuffle(allWords, seededRand);
+    const selectedWord = shuffledWordList[dateIndex % shuffledWordList.length];
     
-    console.log(xmur3(allWords[0]))
+    console.log(selectedWord);
   }, []);
 
   return (
