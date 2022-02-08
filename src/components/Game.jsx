@@ -32,35 +32,45 @@ const GameContainer = styled.div`
 export const Game = () => {
   const [guesses, setGuesses] = React.useState([[]]);
   const [numGuesses, setNumGuesses] = React.useState(0);
+  const [answerFound, setAnswerFound] = React.useState(false);
   const answer = React.useRef(null);
 
   const addGuessLetter = React.useCallback((letter) => {
     setGuesses((oldGuesses) => {
+      if (numGuesses === NUM_GUESSES || answerFound) {
+        return oldGuesses;
+      }
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-      if (guesses[numGuesses] && newGuesses[numGuesses].length < WORD_LENGTH) {
+      if (!newGuesses[numGuesses] || typeof newGuesses[numGuesses] === "undefined") {
+        newGuesses[numGuesses] = [];
+      }
+      if (newGuesses[numGuesses].length < WORD_LENGTH) {
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
       return newGuesses;
     });
-  }, [numGuesses]);
+  }, [numGuesses, answerFound]);
 
   const removeGuessLetter = React.useCallback(() => {
     setGuesses((oldGuesses) => {
+      if (numGuesses === NUM_GUESSES || answerFound) {
+        return oldGuesses;
+      }
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
       if (newGuesses[numGuesses] && newGuesses[numGuesses].length > 0) {
         newGuesses[numGuesses].pop();
       }
       return newGuesses;
     });
-  }, [numGuesses]);
+  }, [numGuesses, answerFound]);
   
   const submitGuess = React.useCallback(() => {
     if (numGuesses < NUM_GUESSES) {
       if (guesses[numGuesses]) {
         if (guesses[numGuesses].length === WORD_LENGTH) {
-          // TODO: Check if valid guess
           const guess = guesses[numGuesses].map(obj => obj.letter).join('');
           if (wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
+            // If they guessed a valid word, check each letter
             setGuesses(oldGuesses => {
               const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
               const guessRow = newGuesses[numGuesses];
@@ -74,14 +84,20 @@ export const Game = () => {
                 }
               }
               newGuesses[numGuesses] = guessRow;
+              
+              // Stop the game if answer found
+              if (guessRow.map(obj => obj.letter).join('').toUpperCase() === answer.current.toUpperCase()) {
+                setAnswerFound(true);
+              }
+              
               return newGuesses;
             })
             setNumGuesses(oldNumGuesses => oldNumGuesses+1);
           } else {
-            // TODO: Error not in word list
+            // Error: Guess not in word list
           }
         } else {
-          // TODO: Error not enough letters
+          // Error: Not enough letters in guess
         }
       }
     }
@@ -116,6 +132,7 @@ export const Game = () => {
         removeGuessLetter={removeGuessLetter}
         submitGuess={submitGuess}
       />
+      {answerFound ? <div>Answer found</div> : <div> answer not found</div>}
     </>
   );
 };
