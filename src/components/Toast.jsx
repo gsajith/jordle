@@ -12,6 +12,7 @@ const ToastContainer = styled.div`
   width: fit-content;
   align-items: center;
   font-size: 14px;
+  margin: 8px;
 `;
 
 export const Toast = ({ text }) => {
