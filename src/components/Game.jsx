@@ -55,7 +55,6 @@ export const Game = () => {
   };
 
   React.useEffect(() => {
-    answer.current = "lares";
     const currentDate = new Date();
     const date = new Date(
       currentDate.getFullYear(),
@@ -63,16 +62,15 @@ export const Game = () => {
       currentDate.getDate() + 1
     );
     const dateIndex = Math.floor(date.getTime()/86400000);
-    console.log(dateIndex);
     
     const allWords = wordlist.split("\n").filter(word => word.length === WORD_LENGTH);
-    console.log(allWords);
     
-    const seededRand = getSeededRand(allWords[0]);
+    const seededRand = getSeededRand("@guamhat");
     const shuffledWordList = shuffle(allWords, seededRand);
     const selectedWord = shuffledWordList[dateIndex % shuffledWordList.length];
     
-    console.log(selectedWord);
+    answer.current = selectedWord;
+    console.log(answer.current);
   }, []);
 
   return (
