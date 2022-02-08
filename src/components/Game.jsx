@@ -34,27 +34,53 @@ export const Game = () => {
   const [guesses, setGuesses] = useStickyState([[]], "guesses");
   const [numGuesses, setNumGuesses] = useStickyState(0, "numGuesses");
   const [answerFound, setAnswerFound] = useStickyState(false, "answerFound");
-  
+
   const WORD_LIST_LENGTH = wordlist
-      .split("\n")
-      .filter((word) => word.length === WORD_LENGTH).length;
+    .split("\n")
+    .filter((word) => word.length === WORD_LENGTH).length;
+
+  const [wordListLength, setWordListLength] = useStickyState(
+    WORD_LIST_LENGTH,
+    "wordListLength"
+  );
+
+  const [lastPlayedDate, setLastPlayedDate] = useStickyState(
+    "",
+    "lastPlayedDate"
+  );
   
-  const [wordListLength, setWordListLength] = useStickyState(WORD_LIST_LENGTH, "wordListLength");
-  
-  const [lastPlayedDate, setLastPlayedDate] = useStickyState("", "lastPlayedDate");
-  
+  const [gamesPlayed, setGamesPlayed] = useStickyState(0, "gamesPlayed");
+  const [gamesWon, setGamesWon] = useStickyState(0, "gamesWon");
+  const [currentStreak, setCurrentStreak] = useStickyState(0, "currentStreak");
+  const [maxStreak, setMaxStreak] = useStickyState(0, "maxStreak");
+  const [guessDistribution, setGuessDistribution] = useStickyState(new Array(NUM_GUESSES).fill(0), "guessDistribution")
+
   const [errors, setErrors] = React.useState([]);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
   
-  // TODO: Temporary while debugging - remove later
-  if (WORD_LIST_LENGTH !== wordListLength) {
-    // Wordlist has changed — reset the game for today
+  const resetTodaysGame = React.useCallback(() => {
     setWordListLength(WORD_LIST_LENGTH);
     setGuesses([[]]);
     setNumGuesses(0);
     setAnswerFound(false);
-  }
+  }, []);
+  
+  const gameWon = React.useCallback(() => {
+    setGamesPlayed(gamesPlayed => gamesPlayed + 1);
+    setGamesWon(gamesWon => gamesWon + 1);
+    setCurrentStreak(currentStreak => currentStreak + 1);
+    setMaxStreak(maxStreak => {
+      if (currentStreak > maxStreak) {
+        return currentStreak;
+      }
+      return maxStreak;
+    })
+    setGuessDistribution(oldGuessDistribution => {
+      const newGuessDistribution = [...oldGuessDistribution];
+      
+    })
+  }, []);
 
   const addGuessLetter = React.useCallback(
     (letter) => {
@@ -90,22 +116,22 @@ export const Game = () => {
       return newGuesses;
     });
   }, [numGuesses, answerFound]);
-  
+
   const triggerError = React.useCallback((text) => {
-    const errorObject = {text: text, code: errorNumber.current};
+    const errorObject = { text: text, code: errorNumber.current };
     errorNumber.current = errorNumber.current + 1;
-    
+
     setErrors((oldErrors) => {
       const newErrors = [...oldErrors];
       newErrors.push(errorObject);
       return newErrors;
-    })
+    });
     setTimeout(() => {
       setErrors((oldErrors) => {
         const newErrors = [...oldErrors];
         newErrors.shift();
         return newErrors;
-      })
+      });
     }, 2500);
   }, []);
 
@@ -181,8 +207,17 @@ export const Game = () => {
       currentDate.getMonth(),
       currentDate.getDate()
     );
-    const dateString = date.getFullYear() + "" + date.getMonth() + date.getDate();
-    console.log(dateString);
+    
+    const dateString =
+      date.getFullYear() +
+      date.getMonth().toString().padStart(2, "0") +
+      date.getDate().toString().padStart(2, "0");
+    
+    if (lastPlayedDate !== dateString) {
+      setLastPlayedDate(dateString);
+      resetTodaysGame();
+    }
+    
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
     const allWords = wordlist
