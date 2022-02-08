@@ -26,7 +26,28 @@ const Key = styled.button`
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
-  background-color: ${(props) => props.theme.keyBackgroundColor};
+  background-color: ${(props) => {
+    switch (props.state) {
+      case EMPTY:
+        return props.theme.keyBackgroundColor;
+        break;
+      case GUESS:
+        return props.theme.keyBackgroundColor;
+        break;
+      case NO:
+        return props.theme.gridColorNo;
+        break;
+      case MAYBE:
+        return props.theme.gridColorMaybe;
+        break;
+      case YES:
+        return props.theme.gridColorYes;
+        break;
+      default:
+        return props.theme.keyBackgroundColor;
+        break;
+    }
+  }};
   color: ${(props) => props.theme.keyTextColor};
   -webkit-tap-highlight-color: ${(props) => props.theme.keyHighlightColor};
   flex: ${(props) => (props.largeButton ? 1.5 : 1)};
@@ -52,6 +73,7 @@ export const Keyboard = ({
   removeGuessLetter,
   submitGuess,
   guesses,
+  numGuesses,
 }) => {
   const [keyMap, setKeyMap] = React.useState({});
 
@@ -61,22 +83,35 @@ export const Keyboard = ({
       return { key: key, state: EMPTY };
     });
     flatArray.forEach(
-      (arrayItem) => (newKeyMap[arrayItem.key] = arrayItem.state)
+      (arrayItem) => (newKeyMap[arrayItem.key.toLowerCase()] = arrayItem.state)
     );
 
     for (var i = 0; i < guesses.length; i++) {
       if (guesses[i]) {
         for (var j = 0; j < guesses[i].length; j++) {
-          if (typeof keyMap[guesses[i][j].letter] !== "undefined") {
-            newKeyMap[guesses[i][j].letter] = Math.max(guesses[i][j].state, keyMap[guesses[i][j].letter]);
+          const letter = guesses[i][j].letter.toLowerCase();
+          
+          if (typeof keyMap[letter] !== "undefined") {
+            if (typeof newKeyMap[letter] !== "undefined") {
+              newKeyMap[letter] = Math.max(
+                Math.max(guesses[i][j].state, keyMap[letter]),
+                newKeyMap[letter]
+              );
+            } else {
+              newKeyMap[letter] = Math.max(guesses[i][j].state, keyMap[letter]);
+            }
           } else {
-            newKeyMap[guesses[i][j].letter] = guesses[i][j].state;
+            if (typeof newKeyMap[letter] !== "undefined") {
+              newKeyMap[letter] = Math.max(newKeyMap[letter], guesses[i][j].state);
+            } else {
+              newKeyMap[letter] = guesses[i][j].state;
+            }
           }
         }
       }
     }
     setKeyMap(newKeyMap);
-  }, [guesses]);
+  }, [numGuesses]);
 
   const keyPressed = React.useCallback(
     (evt) => {
@@ -107,6 +142,7 @@ export const Keyboard = ({
             {row.map((key) => {
               return (
                 <Key
+                  state={keyMap[key.toLowerCase()]}
                   key={key}
                   largeButton={!isLetter(key)}
                   onClick={() => {

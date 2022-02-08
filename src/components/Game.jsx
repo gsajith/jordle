@@ -276,7 +276,6 @@ export const Game = () => {
         }
       }
     }
-    console.log("setting to", lastGuessLine);
     setNumGuesses(lastGuessLine);
   }, [guesses]);
 
@@ -357,6 +356,7 @@ export const Game = () => {
         removeGuessLetter={removeGuessLetter}
         submitGuess={submitGuess}
         guesses={guesses}
+        numGuesses={numGuesses}
       />
       <ToastContainer>
         {errors.map((error) => (
