@@ -31,12 +31,30 @@ const GameContainer = styled.div`
 `;
 
 export const Game = () => {
-  const [guesses, setGuesses] = React.useStickyState([[]], "guesses");
-  const [numGuesses, setNumGuesses] = React.useState(0);
-  const [answerFound, setAnswerFound] = React.useState(false);
+  const [guesses, setGuesses] = useStickyState([[]], "guesses");
+  const [numGuesses, setNumGuesses] = useStickyState(0, "numGuesses");
+  const [answerFound, setAnswerFound] = useStickyState(false, "answerFound");
+  
+  const WORD_LIST_LENGTH = wordlist
+      .split("\n")
+      .filter((word) => word.length === WORD_LENGTH).length;
+  
+  const [wordListLength, setWordListLength] = useStickyState(WORD_LIST_LENGTH, "wordListLength");
+  
+  const [lastPlayedDate, setLastPlayedDate] = useStickyState("", "lastPlayedDate");
+  
   const [errors, setErrors] = React.useState([]);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
+  
+  // TODO: Temporary while debugging - remove later
+  if (WORD_LIST_LENGTH !== wordListLength) {
+    // Wordlist has changed — reset the game for today
+    setWordListLength(WORD_LIST_LENGTH);
+    setGuesses([[]]);
+    setNumGuesses(0);
+    setAnswerFound(false);
+  }
 
   const addGuessLetter = React.useCallback(
     (letter) => {
@@ -161,8 +179,10 @@ export const Game = () => {
     const date = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
-      currentDate.getDate() + 1
+      currentDate.getDate()
     );
+    const dateString = date.getFullYear() + "" + date.getMonth() + date.getDate();
+    console.log(dateString);
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
     const allWords = wordlist
