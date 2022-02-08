@@ -6,7 +6,7 @@ import GameGrid from "./GameGrid";
 import Toast from "./Toast";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import wordlist from "../static/wordlist";
-import { getSeededRand, shuffle } from "../utils";
+import { getSeededRand, shuffle, useStickyState } from "../utils";
 
 export const EMPTY = 0;
 export const GUESS = 1;
@@ -31,7 +31,7 @@ const GameContainer = styled.div`
 `;
 
 export const Game = () => {
-  const [guesses, setGuesses] = React.useState([[]]);
+  const [guesses, setGuesses] = React.useStickyState([[]], "guesses");
   const [numGuesses, setNumGuesses] = React.useState(0);
   const [answerFound, setAnswerFound] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
@@ -120,8 +120,10 @@ export const Game = () => {
               // Do a secondary loop to highlight slightly correct characters
               for (var i = 0; i < guessRow.length; i++) {
                 if (answerRow.includes(guessRow[i].letter)) {
-                  guessRow[i].state = MAYBE;
-                  answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
+                  if (guessRow[i].state === GUESS) {
+                    guessRow[i].state = MAYBE;
+                    answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
+                  }
                 } else {
                   if (guessRow[i].state === GUESS) {
                     guessRow[i].state = NO;

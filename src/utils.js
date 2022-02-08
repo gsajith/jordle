@@ -1,3 +1,5 @@
+import * as React from "react";
+
 export const isLetter = (str) => {
   return str.length === 1 && str.match(/[a-z]/i);
 };
@@ -37,4 +39,17 @@ export const shuffle = (array, rand) => {
   }
 
   return array;
+}
+
+export const useStickyState = (defaultValue, key) => {
+  const [value, setValue] = React.useState(() => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null
+      ? JSON.parse(stickyValue)
+      : defaultValue;
+  });
+  React.useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
 }
