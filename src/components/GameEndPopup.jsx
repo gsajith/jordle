@@ -94,7 +94,7 @@ const GraphBar = styled.div`
   height: 100%;
   position: relative;
   width: 7%;
-  background-color: ${props => props.theme.gridColorNo};
+  background-color: ${(props) => props.current ? props.theme.gridColorYes : props.theme.gridColorNo};
   display: flex;
   justify-content: end;
   font-weight: bold;
@@ -109,18 +109,31 @@ export const GameEndPopup = ({
   maxStreak = 0,
   guessDistribution,
   hideContainer,
-  wonCurrent
+  currentWinNumGuesses,
 }) => {
+  const maxNumGuesses = Math.max(...guessDistribution);
+
   return (
     <PopupOverlay onClick={hideContainer}>
       <PopupContainer>
         <div
-          style={{ display: "flex", justifyContent: "end", padding: 4, width: "100%" }}
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            padding: 4,
+            width: "100%",
+          }}
           onClick={hideContainer}
         >
           X
         </div>
-        <div style={{display: "flex", justifyContent: "center", flexDirection: "column"}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
           <Title>STATISTICS</Title>
           <Statistics>
             <StatisticsContainer>
@@ -128,7 +141,11 @@ export const GameEndPopup = ({
               <Label>Played</Label>
             </StatisticsContainer>
             <StatisticsContainer>
-              <Statistic>{gamesPlayed > 0 ? Math.floor((100*gamesWon)/gamesPlayed) : 0}</Statistic>
+              <Statistic>
+                {gamesPlayed > 0
+                  ? Math.floor((100 * gamesWon) / gamesPlayed)
+                  : 0}
+              </Statistic>
               <Label>Win %</Label>
             </StatisticsContainer>
             <StatisticsContainer>
@@ -140,66 +157,105 @@ export const GameEndPopup = ({
               <Label>Max Streak</Label>
             </StatisticsContainer>
           </Statistics>
-          
+
           <Title>GUESS DISTRIBUTION</Title>
         </div>
-        <div style={{display: "flex", justifyContent: "center", flexDirection: "column", width: "100%", alignItems: "center"}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
           <GuessDistribution>
             <GraphContainer>
               <div>1</div>
               <Graph>
-                <GraphBar>
-                  0
+                <GraphBar
+                  current={currentWinNumGuesses===1}
+                  style={{
+                    width:
+                      guessDistribution[0] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[0]) / maxNumGuesses + "%",
+                  }}
+                >
+                  {guessDistribution[0]}
                 </GraphBar>
               </Graph>
             </GraphContainer>
-            
-             <GraphContainer>
+
+            <GraphContainer>
               <div>2</div>
               <Graph>
-                <GraphBar>
-                  0
-                </GraphBar>
+                <GraphBar
+                  current={currentWinNumGuesses===2}
+                  style={{
+                    width:
+                      guessDistribution[1] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[1]) / maxNumGuesses + "%",
+                  }}>{guessDistribution[1]}</GraphBar>
               </Graph>
             </GraphContainer>
-            
-             <GraphContainer>
+
+            <GraphContainer>
               <div>3</div>
               <Graph>
-                <GraphBar>
-                  0
-                </GraphBar>
+                <GraphBar
+                  current={currentWinNumGuesses===3}
+                  style={{
+                    width:
+                      guessDistribution[2] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[2]) / maxNumGuesses + "%",
+                  }}>{guessDistribution[2]}</GraphBar>
               </Graph>
             </GraphContainer>
-            
-             <GraphContainer>
+
+            <GraphContainer>
               <div>4</div>
               <Graph>
-                <GraphBar>
-                  0
-                </GraphBar>
+                <GraphBar
+                  current={currentWinNumGuesses===4}
+                  style={{
+                    width:
+                      guessDistribution[3] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[3]) / maxNumGuesses + "%",
+                  }}>{guessDistribution[3]}</GraphBar>
               </Graph>
             </GraphContainer>
-            
-             <GraphContainer>
+
+            <GraphContainer>
               <div>5</div>
               <Graph>
-                <GraphBar>
-                  0
-                </GraphBar>
+                <GraphBar
+                  current={currentWinNumGuesses===5}
+                  style={{
+                    width:
+                      guessDistribution[4] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[4]) / maxNumGuesses + "%",
+                  }}>{guessDistribution[4]}</GraphBar>
               </Graph>
             </GraphContainer>
-            
-             <GraphContainer>
+
+            <GraphContainer>
               <div>6</div>
               <Graph>
-                <GraphBar>
-                  0
-                </GraphBar>
+                <GraphBar
+                  current={currentWinNumGuesses===6}
+                  style={{
+                    width:
+                      guessDistribution[5] === 0
+                        ? "7%"
+                        : (100 * guessDistribution[5]) / maxNumGuesses + "%",
+                  }}>{guessDistribution[5]}</GraphBar>
               </Graph>
             </GraphContainer>
-            
-            
           </GuessDistribution>
         </div>
       </PopupContainer>

@@ -44,7 +44,7 @@ export const ToastContainer = styled.div`
 export const Game = () => {
   // TODO: Show persistent answer if all 6 guesses used up
   // TODO: Show guess state in keyboard
-  
+
   // ********************* PERSISTENT GAME STATE ******************** //
   const [guesses, setGuesses] = useStickyState([[]], "guesses");
   const [numGuesses, setNumGuesses] = useStickyState(0, "numGuesses");
@@ -113,7 +113,7 @@ export const Game = () => {
     setCurrentStreak(0);
     setLastLossDate(todaysDateString.current);
   }, []);
-  
+
   const resetTodaysGame = React.useCallback(() => {
     setGuesses([[]]);
     if (answerFound) {
@@ -289,7 +289,6 @@ export const Game = () => {
       resetTodaysGame();
     }
 
-    
     // Pick today's word based on a pseudo-RNG function
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
@@ -320,7 +319,15 @@ export const Game = () => {
 
   return (
     <>
-      <GameEndPopup gamesPlayed={gamesPlayed} gamesWon={gamesWon} currentStreak={currentStreak} maxStreak={maxStreak} hideContainer={() => console.log('hide')}/>
+      <GameEndPopup
+        gamesPlayed={gamesPlayed}
+        gamesWon={gamesWon}
+        currentStreak={currentStreak}
+        maxStreak={maxStreak}
+        hideContainer={() => console.log("hide")}
+        guessDistribution={guessDistribution}
+        currentWinNumGuesses={answerFound ? numGuesses : 0}
+      />
       <GameContainer>
         <GameGrid guesses={guesses} />
       </GameContainer>
