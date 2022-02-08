@@ -37,7 +37,7 @@ export const Game = () => {
   const addGuessLetter = (letter) => {
     setGuesses((oldGuesses) => {
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-      if (newGuesses[numGuesses].length < WORD_LENGTH) {
+      if (guesses[numGuesses] && newGuesses[numGuesses].length < WORD_LENGTH) {
         newGuesses[numGuesses].push({ letter: letter, state: GUESS });
       }
       return newGuesses;
@@ -47,12 +47,22 @@ export const Game = () => {
   const removeGuessLetter = () => {
     setGuesses((oldGuesses) => {
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-      if (newGuesses[numGuesses].length > 0) {
+      if (guesses[numGuesses] && newGuesses[numGuesses].length > 0) {
         newGuesses[numGuesses].pop();
       }
       return newGuesses;
     });
   };
+  
+  const submitGuess = () => {
+    if (numGuesses < NUM_GUESSES) {
+      // TODO: Check if valid guess
+      if (guesses[numGuesses] && guesses[numGuesses].length === WORD_LENGTH) {
+        setNumGuesses(oldNumGuesses => oldNumGuesses+1);
+      }
+      console.log("guess length: " + guesses[numGuesses].length);
+    }
+  }
 
   React.useEffect(() => {
     const currentDate = new Date();
@@ -81,6 +91,7 @@ export const Game = () => {
       <Keyboard
         addGuessLetter={addGuessLetter}
         removeGuessLetter={removeGuessLetter}
+        submitGuess={submitGuess}
       />
     </>
   );

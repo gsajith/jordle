@@ -46,7 +46,7 @@ const KEYS = [
   ["enter", "z", "x", "c", "v", "b", "n", "m", "⏪"],
 ];
 
-export const Keyboard = ({addGuessLetter, removeGuessLetter}) => {
+export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess}) => {
   const keyPressed = (evt) => {
     if (KEYS.some(row => row.includes(evt.key))) {
       addGuessLetter(evt.key);
@@ -74,6 +74,8 @@ export const Keyboard = ({addGuessLetter, removeGuessLetter}) => {
                       addGuessLetter(key);
                     } else if (key !== "enter") {
                       removeGuessLetter();
+                    } else {
+                      submitGuess();
                     }
                   }}>
                   {key}
