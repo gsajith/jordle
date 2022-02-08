@@ -48,38 +48,51 @@ export const Game = () => {
     "",
     "lastPlayedDate"
   );
-  
+
   const [gamesPlayed, setGamesPlayed] = useStickyState(0, "gamesPlayed");
   const [gamesWon, setGamesWon] = useStickyState(0, "gamesWon");
   const [currentStreak, setCurrentStreak] = useStickyState(0, "currentStreak");
   const [maxStreak, setMaxStreak] = useStickyState(0, "maxStreak");
-  const [guessDistribution, setGuessDistribution] = useStickyState(new Array(NUM_GUESSES).fill(0), "guessDistribution")
+  const [guessDistribution, setGuessDistribution] = useStickyState(
+    new Array(NUM_GUESSES).fill(0),
+    "guessDistribution"
+  );
 
   const [errors, setErrors] = React.useState([]);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
-  
+
   const resetTodaysGame = React.useCallback(() => {
     setWordListLength(WORD_LIST_LENGTH);
     setGuesses([[]]);
     setNumGuesses(0);
     setAnswerFound(false);
   }, []);
-  
+
   const gameWon = React.useCallback(() => {
-    setGamesPlayed(gamesPlayed => gamesPlayed + 1);
-    setGamesWon(gamesWon => gamesWon + 1);
-    setCurrentStreak(currentStreak => currentStreak + 1);
-    setMaxStreak(maxStreak => {
+    setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
+    setGamesWon((gamesWon) => gamesWon + 1);
+    setCurrentStreak((currentStreak) => currentStreak + 1);
+    setMaxStreak((maxStreak) => {
       if (currentStreak > maxStreak) {
         return currentStreak;
       }
       return maxStreak;
-    })
-    setGuessDistribution(oldGuessDistribution => {
+    });
+    setGuessDistribution((oldGuessDistribution) => {
       const newGuessDistribution = [...oldGuessDistribution];
-      
-    })
+      newGuessDistribution[numGuesses]++;
+      return newGuessDistribution;
+    });
+  }, []);
+
+  const gameLost = React.useCallback(() => {
+    setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
+    setCurrentStreak(0);
+  }, []);
+
+  React.useEffect(() => {
+    gameWon();
   }, []);
 
   const addGuessLetter = React.useCallback(
@@ -207,17 +220,17 @@ export const Game = () => {
       currentDate.getMonth(),
       currentDate.getDate()
     );
-    
+
     const dateString =
       date.getFullYear() +
       date.getMonth().toString().padStart(2, "0") +
       date.getDate().toString().padStart(2, "0");
-    
+
     if (lastPlayedDate !== dateString) {
       setLastPlayedDate(dateString);
       resetTodaysGame();
     }
-    
+
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
     const allWords = wordlist
