@@ -260,11 +260,19 @@ export const Game = () => {
 
         return newGuesses;
       });
-      setNumGuesses((oldNumGuesses) => {
-        return oldNumGuesses + 1;
-      });
     }
   }, [numGuesses, guesses]);
+  
+  React.useEffect(() => {
+    var lastGuess = 0;
+    for(var i = 0; i < guesses.length; i++) {
+      if (guesses[i] && guesses[i][0] && guesses[i][0].state !== GUESS) {
+        lastGuess = i;
+      }
+    }
+    console.log("setting numGuesses to", lastGuess+1);
+    setNumGuesses(lastGuess+1);
+  }, [guesses]);
 
   React.useEffect(() => {
     const currentDate = new Date();
