@@ -30,78 +30,65 @@ const GameContainer = styled.div`
   overflow: hidden;
 `;
 
+export const ToastContainer = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, 0);
+`;
+
 export const Game = () => {
+  // TODO: Show persistent answer if all 6 guesses used up
+  // TODO: Show guess state in keyboard
+  
+  // ********************* PERSISTENT GAME STATE ******************** //
   const [guesses, setGuesses] = useStickyState([[]], "guesses");
   const [numGuesses, setNumGuesses] = useStickyState(0, "numGuesses");
   const [answerFound, setAnswerFound] = useStickyState(false, "answerFound");
-
   const WORD_LIST_LENGTH = wordlist
     .split("\n")
     .filter((word) => word.length === WORD_LENGTH).length;
-
   const [wordListLength, setWordListLength] = useStickyState(
     WORD_LIST_LENGTH,
     "wordListLength"
   );
-
   const [lastPlayedDate, setLastPlayedDate] = useStickyState(
     "",
     "lastPlayedDate"
   );
   const [lastWinDate, setLastWinDate] = useStickyState("", "lastWinDate");
   const [lastLossDate, setLastLossDate] = useStickyState("", "lastLossDate");
-
   const [gamesPlayed, setGamesPlayed] = useStickyState(0, "gamesPlayed");
   const [gamesWon, setGamesWon] = useStickyState(0, "gamesWon");
   const [currentStreak, setCurrentStreak] = useStickyState(0, "currentStreak");
   const [maxStreak, setMaxStreak] = useStickyState(0, "maxStreak");
-  const [mostRecentStreak, setMostRecentStreak] = useStickyState(0, "mostRecentStreak");
-  const [currentStreakIsMax, setCurrentStreakIsMax] = useStickyState(false, "currentStreakIsMax");
+  const [mostRecentStreak, setMostRecentStreak] = useStickyState(
+    0,
+    "mostRecentStreak"
+  );
+  const [currentStreakIsMax, setCurrentStreakIsMax] = useStickyState(
+    false,
+    "currentStreakIsMax"
+  );
   const [guessDistribution, setGuessDistribution] = useStickyState(
     new Array(NUM_GUESSES).fill(0),
     "guessDistribution"
   );
+  // ******************** END PERSISTENT GAME STATE ***************** //
 
   const [errors, setErrors] = React.useState([]);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
   const todaysDateString = React.useRef(0);
 
-  const resetTodaysGame = React.useCallback(() => {
-    setWordListLength(WORD_LIST_LENGTH);
-    setGuesses([[]]);
-    if (answerFound) {
-      setGamesPlayed(gamesPlayed => gamesPlayed - 1);
-      setGamesWon(gamesWon => gamesWon - 1);
-      setCurrentStreak(currentStreak => currentStreak - 1);
-      setMostRecentStreak(mostRecentStreak => mostRecentStreak - 1);
-      if (currentStreakIsMax) {
-        setMaxStreak(maxStreak => maxStreak - 1);
-      }
-      setGuessDistribution((oldGuessDistribution) => {
-        const newGuessDistribution = [...oldGuessDistribution];
-        newGuessDistribution[numGuesses-1]--;
-        return newGuessDistribution;
-      })
-      setLastWinDate("");
-    } else if (numGuesses === NUM_GUESSES) {
-      console.log("resetting here");
-      setGamesPlayed(gamesPlayed => gamesPlayed - 1);
-      setCurrentStreak(mostRecentStreak)
-      if (mostRecentStreak >= maxStreak) {
-        setMaxStreak(mostRecentStreak);
-        setCurrentStreakIsMax(true);
-      }
-    }
-    setNumGuesses(0);
-    setAnswerFound(false);
-  }, [numGuesses]);
-
   const gameWon = React.useCallback(() => {
     setGamesPlayed((gamesPlayed) => gamesPlayed + 1);
     setGamesWon((gamesWon) => gamesWon + 1);
     setCurrentStreak((currentStreak) => currentStreak + 1);
-    setMostRecentStreak((mostRecentStreak) => mostRecentStreak+1);
+    setMostRecentStreak((mostRecentStreak) => mostRecentStreak + 1);
     setMaxStreak((maxStreak) => {
       // TODO: Is this flaky / race condition?
       if (currentStreak + 1 > maxStreak) {
@@ -125,6 +112,35 @@ export const Game = () => {
     setCurrentStreak(0);
     setLastLossDate(todaysDateString.current);
   }, []);
+  
+  const resetTodaysGame = React.useCallback(() => {
+    setGuesses([[]]);
+    if (answerFound) {
+      setGamesPlayed((gamesPlayed) => gamesPlayed - 1);
+      setGamesWon((gamesWon) => gamesWon - 1);
+      setCurrentStreak((currentStreak) => currentStreak - 1);
+      setMostRecentStreak((mostRecentStreak) => mostRecentStreak - 1);
+      if (currentStreakIsMax) {
+        setMaxStreak((maxStreak) => maxStreak - 1);
+      }
+      setGuessDistribution((oldGuessDistribution) => {
+        const newGuessDistribution = [...oldGuessDistribution];
+        newGuessDistribution[numGuesses - 1]--;
+        return newGuessDistribution;
+      });
+      setLastWinDate("");
+    } else if (numGuesses === NUM_GUESSES) {
+      setGamesPlayed((gamesPlayed) => gamesPlayed - 1);
+      setCurrentStreak(mostRecentStreak);
+      if (mostRecentStreak >= maxStreak) {
+        setMaxStreak(mostRecentStreak);
+        setCurrentStreakIsMax(true);
+      }
+      setLastLossDate("");
+    }
+    setNumGuesses(0);
+    setAnswerFound(false);
+  }, [numGuesses, answerFound]);
 
   const addGuessLetter = React.useCallback(
     (letter) => {
@@ -233,7 +249,7 @@ export const Game = () => {
             });
             setNumGuesses((oldNumGuesses) => {
               console.log(oldNumGuesses + 1);
-              return oldNumGuesses+1;
+              return oldNumGuesses + 1;
             });
           } else {
             // Error: Guess not in word list
@@ -260,16 +276,20 @@ export const Game = () => {
       date.getMonth().toString().padStart(2, "0") +
       date.getDate().toString().padStart(2, "0");
 
+    // Reset if last played before today
     if (lastPlayedDate !== todaysDateString.current) {
       setLastPlayedDate(todaysDateString.current);
       resetTodaysGame();
     }
-    
+
+    // Reset if word list has changed since last play
     if (wordListLength !== WORD_LIST_LENGTH) {
       setWordListLength(WORD_LIST_LENGTH);
       resetTodaysGame();
     }
 
+    
+    // Pick today's word based on a pseudo-RNG function
     const dateIndex = Math.floor(date.getTime() / 86400000);
 
     const allWords = wordlist
@@ -281,13 +301,18 @@ export const Game = () => {
     const selectedWord = shuffledWordList[dateIndex % shuffledWordList.length];
 
     answer.current = selectedWord;
-    console.log(selectedWord);
+    // console.log(selectedWord);
   }, []);
-  
+
   React.useEffect(() => {
+    // Check win and loss states
     if (answerFound && lastWinDate !== todaysDateString.current) {
       gameWon();
-    } else if (!answerFound && numGuesses === NUM_GUESSES && lastLossDate !== todaysDateString.current) {
+    } else if (
+      !answerFound &&
+      numGuesses === NUM_GUESSES &&
+      lastLossDate !== todaysDateString.current
+    ) {
       gameLost();
     }
   }, [answerFound, numGuesses]);
@@ -302,21 +327,11 @@ export const Game = () => {
         removeGuessLetter={removeGuessLetter}
         submitGuess={submitGuess}
       />
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          left: "50%",
-          top: "10%",
-          transform: "translate(-50%, 0)",
-        }}
-      >
+      <ToastContainer>
         {errors.map((error) => (
           <Toast text={error.text} />
         ))}
-      </div>
+      </ToastContainer>
     </>
   );
 };
