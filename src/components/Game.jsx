@@ -206,61 +206,63 @@ export const Game = () => {
       if (guesses[numGuesses].length < WORD_LENGTH) {
         // Error: Not enough letters in guess
         triggerError("Not enough letters");
-      } else if (guesses[numGuesses].length === WORD_LENGTH) {
-        const guess = guesses[numGuesses].map((obj) => obj.letter).join("");
-        if (wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
-          // If they guessed a valid word, check each letter
-          setGuesses((oldGuesses) => {
-            const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
-            const guessRow = newGuesses[numGuesses].map((obj) => {
-              return { letter: obj.letter.toUpperCase(), state: obj.state };
-            });
-            const answerRow = answer.current
-              .split("")
-              .map((letter) => letter.toUpperCase());
+        return;
+      }
 
-            // Give priority to highlighting fully correct characters
-            for (var i = 0; i < guessRow.length; i++) {
-              if (guessRow[i].letter === answerRow[i]) {
-                guessRow[i].state = YES;
-                answerRow[i] = "";
-              }
-            }
+      const guess = guesses[numGuesses].map((obj) => obj.letter).join("");
+      if (!wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
+        // Error: Guess not in word list
+        triggerError("Not in word list");
+        return;
+      }
 
-            // Do a secondary loop to highlight slightly correct characters
-            for (var i = 0; i < guessRow.length; i++) {
-              if (answerRow.includes(guessRow[i].letter)) {
-                if (guessRow[i].state === GUESS) {
-                  guessRow[i].state = MAYBE;
-                  answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
-                }
-              } else {
-                if (guessRow[i].state === GUESS) {
-                  guessRow[i].state = NO;
-                }
-              }
-            }
+      // If they guessed a valid word, check each letter
+      setGuesses((oldGuesses) => {
+        const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
+        const guessRow = newGuesses[numGuesses].map((obj) => {
+          return { letter: obj.letter.toUpperCase(), state: obj.state };
+        });
+        const answerRow = answer.current
+          .split("")
+          .map((letter) => letter.toUpperCase());
 
-            newGuesses[numGuesses] = guessRow;
-
-            // Stop the game if answer found
-            if (
-              guessRow.map((obj) => obj.letter).join("") ===
-              answer.current.toUpperCase()
-            ) {
-              setAnswerFound(true);
-            }
-
-            return newGuesses;
-          });
-          setNumGuesses((oldNumGuesses) => {
-            return oldNumGuesses + 1;
-          });
-        } else {
-          // Error: Guess not in word list
-          triggerError("Not in word list");
+        // Give priority to highlighting fully correct characters
+        for (var i = 0; i < guessRow.length; i++) {
+          if (guessRow[i].letter === answerRow[i]) {
+            guessRow[i].state = YES;
+            answerRow[i] = "";
+          }
         }
-      } 
+
+        // Do a secondary loop to highlight slightly correct characters
+        for (var i = 0; i < guessRow.length; i++) {
+          if (answerRow.includes(guessRow[i].letter)) {
+            if (guessRow[i].state === GUESS) {
+              guessRow[i].state = MAYBE;
+              answerRow[answerRow.indexOf(guessRow[i].letter)] = "";
+            }
+          } else {
+            if (guessRow[i].state === GUESS) {
+              guessRow[i].state = NO;
+            }
+          }
+        }
+
+        newGuesses[numGuesses] = guessRow;
+
+        // Stop the game if answer found
+        if (
+          guessRow.map((obj) => obj.letter).join("") ===
+          answer.current.toUpperCase()
+        ) {
+          setAnswerFound(true);
+        }
+
+        return newGuesses;
+      });
+      setNumGuesses((oldNumGuesses) => {
+        return oldNumGuesses + 1;
+      });
     }
   }, [numGuesses, guesses]);
 
