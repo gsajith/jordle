@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import { EMPTY, GUESS, NO, YES, MAYBE } from "./Game";
-import { useSpring, animated, useTransition } from 'react-spring'
 
 const GameGridContainer = styled.div`
   display: grid;
@@ -70,11 +69,6 @@ const GridItem = styled.div`
 `;
 
 const GameGrid = ({ guesses }) => {
-  
-  const transitions = useTransition(guesses, {
-    from: item => 
-  })
-  
   return (
     <GameGridContainer>
       {[...Array(NUM_GUESSES)].map((row, index) => {

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { TITLE } from "../static/globals";
 import Keyboard from "./Keyboard";
 import GameGrid from "./GameGrid";
+import Toast from "./Toast";
 import { WORD_LENGTH, NUM_GUESSES } from "../static/globals";
 import wordlist from "../static/wordlist";
 import {getSeededRand, shuffle} from "../utils";
@@ -33,6 +34,7 @@ export const Game = () => {
   const [guesses, setGuesses] = React.useState([[]]);
   const [numGuesses, setNumGuesses] = React.useState(0);
   const [answerFound, setAnswerFound] = React.useState(false);
+  const [errors, setErrors] = React.useState(['Word not in word list']);
   const answer = React.useRef(null);
 
   const addGuessLetter = React.useCallback((letter) => {
@@ -147,6 +149,9 @@ export const Game = () => {
         removeGuessLetter={removeGuessLetter}
         submitGuess={submitGuess}
       />
+      <div style={{}}>
+        {errors.map(error => <Toast text={error}/>)}
+      </div>
     </>
   );
 };

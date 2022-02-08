@@ -15,4 +15,6 @@ export const theme = {
   gridBorderColorMaybe: "#b59f3b",
   gridColorYes: "#538d4e",
   gridBorderColorYes: "#538d4e",
+  popupTextColor: "#121213",
+  popupBackgroundColor: "#d7dadc",
 };
