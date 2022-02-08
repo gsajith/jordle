@@ -135,7 +135,7 @@ export const Game = () => {
         return newGuessDistribution;
       });
       setLastWinDate("");
-    } else if (numGuesses === NUM_GUESSES) {
+    } else if (numGuesses >= NUM_GUESSES) {
       setGamesPlayed((gamesPlayed) => gamesPlayed - 1);
       setCurrentStreak(mostRecentStreak);
       if (mostRecentStreak >= maxStreak) {
@@ -151,7 +151,7 @@ export const Game = () => {
   const addGuessLetter = React.useCallback(
     (letter) => {
       setGuesses((oldGuesses) => {
-        if (numGuesses === NUM_GUESSES || answerFound) {
+        if (numGuesses >= NUM_GUESSES || answerFound) {
           return oldGuesses;
         }
         const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
@@ -172,7 +172,7 @@ export const Game = () => {
 
   const removeGuessLetter = React.useCallback(() => {
     setGuesses((oldGuesses) => {
-      if (numGuesses === NUM_GUESSES || answerFound) {
+      if (numGuesses >= NUM_GUESSES || answerFound) {
         return oldGuesses;
       }
       const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
@@ -262,18 +262,24 @@ export const Game = () => {
       });
     }
   }, [numGuesses, guesses]);
-  
+
   React.useEffect(() => {
-    var lastGuess = 0;
-    for(var i = 0; i < guesses.length; i++) {
-      var isFullGuess = false;
-      if (guesses[i] && guesses[i].length === WORD_LENGTH && guesses[i][0].state === GUESS) {
-        isFullGuess = true;
+    var lastGuessLine = 0;
+
+    for (var i = 0; i < guesses.length; i++) {
+      if (guesses && guesses[i] && guesses[i][0] && guesses[i][0].state !== GUESS) {
+        if (
+          !guesses[i + 1] ||
+          !guesses[i + 1][0] ||
+          guesses[i + 1][0].state === EMPTY ||
+          guesses[i + 1][0].state === GUESS
+        ) {
+          lastGuessLine = i + 1;
+        }
       }
-      
     }
-    console.log('set to', lastGuess+1);
-    setNumGuesses(lastGuess+1);
+    console.log("setting to", lastGuessLine);
+    setNumGuesses(lastGuessLine);
   }, [guesses]);
 
   React.useEffect(() => {
@@ -322,12 +328,12 @@ export const Game = () => {
       gameWon();
     } else if (
       !answerFound &&
-      numGuesses === NUM_GUESSES &&
+      numGuesses >= NUM_GUESSES &&
       lastLossDate !== todaysDateString.current
     ) {
       gameLost();
     }
-    if (answerFound || numGuesses === NUM_GUESSES) {
+    if (answerFound || numGuesses >= NUM_GUESSES) {
       setGameEndPopupShown(true);
     }
   }, [answerFound, numGuesses]);
