@@ -50,11 +50,12 @@ export const Keyboard = ({addGuessLetter, removeGuessLetter, submitGuess}) => {
   const keyPressed = React.useCallback((evt) => {
     if (KEYS.some(row => row.includes(evt.key))) {
       addGuessLetter(evt.key);
-    }
-    if (evt.key === "Backspace") {
+    } else if (evt.key === "Backspace") {
       removeGuessLetter();
+    } else if (evt.key === "Enter") {
+      submitGuess();
     }
-  }, [addGuessLetter, removeGuessLetter]);
+  }, [addGuessLetter, removeGuessLetter, submitGuess]);
   
   React.useEffect(() => {
     document.addEventListener("keydown", keyPressed);

@@ -61,6 +61,21 @@ export const Game = () => {
           // TODO: Check if valid guess
           const guess = guesses[numGuesses].map(obj => obj.letter).join('');
           if (wordlist.toUpperCase().split("\n").includes(guess.toUpperCase())) {
+            setGuesses(oldGuesses => {
+              const newGuesses = JSON.parse(JSON.stringify(oldGuesses));
+              const guessRow = newGuesses[numGuesses];
+              for(var i = 0; i < guessRow.length; i++) {
+                if (guessRow[i].letter.toUpperCase() === answer.current.charAt(i).toUpperCase()) {
+                  guessRow[i].state = YES;
+                } else if (answer.current.toUpperCase().indexOf(guessRow[i].letter.toUpperCase()) !== -1) {
+                  guessRow[i].state = MAYBE;
+                } else {
+                  guessRow[i].state = NO;
+                }
+              }
+              newGuesses[numGuesses] = guessRow;
+              return newGuesses;
+            })
             setNumGuesses(oldNumGuesses => oldNumGuesses+1);
           } else {
             // TODO: Error not in word list
@@ -70,7 +85,7 @@ export const Game = () => {
         }
       }
     }
-  }, [numGuesses]);
+  }, [numGuesses, guesses]);
 
   React.useEffect(() => {
     const currentDate = new Date();
