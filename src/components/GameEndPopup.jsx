@@ -1,8 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
 import { timeTilTomorrow } from "../utils";
-import {TITLE} from "../static/globals";
-import {ToastContainer} from "./Game";
+import {TITLE, NUM_GUESSES} from "../static/globals";
+import {ToastContainer,NO, MAYBE, YES} from "./Game";
 import {Toast} from "./Toast";
 
 const PopupContainer = styled.div`
@@ -139,6 +139,18 @@ const ShareButton = styled.button`
   margin-left: 32px;
 `;
 
+/**
+
+Wordle 234 X/6
+
+🟨⬛⬛⬛🟨
+🟨⬛🟩⬛⬛
+⬛🟩⬛⬛🟩
+⬛🟩🟩⬛🟩
+⬛🟩🟩⬛🟩
+⬛🟩🟩⬛🟩
+
+*/
 export const GameEndPopup = ({
   gamesPlayed = 0,
   gamesWon = 0,
@@ -147,6 +159,7 @@ export const GameEndPopup = ({
   guessDistribution,
   hideContainer,
   currentWinNumGuesses,
+  guesses,
 }) => {
   const maxNumGuesses = Math.max(...guessDistribution);
   const [countdown, setCountdown] = React.useState(timeTilTomorrow());
@@ -162,6 +175,26 @@ export const GameEndPopup = ({
   }, []);
   
   const shareClick = React.useCallback(() => {
+    let shareString = "";
+    
+    shareString += TITLE + " ";
+    shareString += currentWinNumGuesses > 0 ? currentWinNumGuesses : "X";
+    shareString += "/";
+    shareString += NUM_GUESSES + "\n";
+    shareString += "\n";
+    
+    guesses.forEach(guessArray => {
+      guessArray.forEach(arrayItem => {
+        if (arrayItem.state === NO) {
+          shareString += "⬛";
+        } else if (arrayItem.state === MAYBE) {
+          shareString += "🟨";
+        } else if (arrayItem.state === YES) {
+          shareString += 
+        }
+      })
+    })
+    navigator.clipboard.writeText(shareString);
     setToastShown(true);
     setTimeout(() => {setToastShown(false);}, 2500);
   }, []);

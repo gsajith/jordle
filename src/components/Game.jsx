@@ -343,6 +343,7 @@ export const Game = () => {
           hideContainer={() => setGameEndPopupShown(false)}
           guessDistribution={guessDistribution}
           currentWinNumGuesses={answerFound ? numGuesses : 0}
+          guesses={guesses}
         />
       )}
       <GameContainer>
