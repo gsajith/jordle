@@ -256,58 +256,63 @@ export const GameEndPopup = ({
 
           <Title>GUESS DISTRIBUTION</Title>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: "100%",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-        >
-          <GuessDistribution>
-            {guessDistribution.map((guess, index) => {
-              return (
-                <GraphContainer key={"distrib" + index}>
-                  <div>{index + 1}</div>
-                  <Graph>
-                    <GraphBar
-                      current={currentWinNumGuesses === index + 1}
-                      style={{
-                        width:
-                          guessDistribution[index] === 0
-                            ? "7%"
-                            : (100 * guessDistribution[index]) / maxNumGuesses +
-                              "%",
-                      }}
-                    >
-                      {guessDistribution[index]}
-                    </GraphBar>
-                  </Graph>
-                </GraphContainer>
-              );
-            })}
-          </GuessDistribution>
+        {gamesPlayed > 0 ? (
           <div
             style={{
-              width: "100%",
-              padding: "0px 16px",
               display: "flex",
-              alignItems: "center",
               justifyContent: "center",
-              marginTop: 8,
+              flexDirection: "column",
+              width: "100%",
+              alignItems: "center",
+              marginBottom: 16,
             }}
           >
-            <CountdownContainer>
-              <Title style={{ marginBottom: 0, marginTop: 16 }}>
-                NEXT {TITLE}
-              </Title>
-              <Statistic>{timeTilTomorrow()}</Statistic>
-            </CountdownContainer>
-            <ShareButton onClick={shareClick}>SHARE</ShareButton>
+            <GuessDistribution>
+              {guessDistribution.map((guess, index) => {
+                return (
+                  <GraphContainer key={"distrib" + index}>
+                    <div>{index + 1}</div>
+                    <Graph>
+                      <GraphBar
+                        current={currentWinNumGuesses === index + 1}
+                        style={{
+                          width:
+                            guessDistribution[index] === 0
+                              ? "7%"
+                              : (100 * guessDistribution[index]) /
+                                  maxNumGuesses +
+                                "%",
+                        }}
+                      >
+                        {guessDistribution[index]}
+                      </GraphBar>
+                    </Graph>
+                  </GraphContainer>
+                );
+              })}
+            </GuessDistribution>
+            <div
+              style={{
+                width: "100%",
+                padding: "0px 16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 8,
+              }}
+            >
+              <CountdownContainer>
+                <Title style={{ marginBottom: 0, marginTop: 16 }}>
+                  NEXT {TITLE}
+                </Title>
+                <Statistic>{timeTilTomorrow()}</Statistic>
+              </CountdownContainer>
+              <ShareButton onClick={shareClick}>SHARE</ShareButton>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{paddingBottom: 16}}>No Data</div>
+        )}
       </PopupContainer>
       {toastShown && (
         <ToastContainer>

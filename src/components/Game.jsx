@@ -90,7 +90,6 @@ export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
     setCurrentStreak((currentStreak) => currentStreak + 1);
     setMostRecentStreak((mostRecentStreak) => mostRecentStreak + 1);
     setMaxStreak((maxStreak) => {
-      // TODO: Is this flaky / race condition?
       if (currentStreak + 1 > maxStreak) {
         setCurrentStreakIsMax(true);
         return currentStreak + 1;
