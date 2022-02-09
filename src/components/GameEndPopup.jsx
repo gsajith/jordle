@@ -150,6 +150,7 @@ export const GameEndPopup = ({
 }) => {
   const maxNumGuesses = Math.max(...guessDistribution);
   const [countdown, setCountdown] = React.useState(timeTilTomorrow());
+  const [toastShown, setToastShown] = React.useState(false);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -158,6 +159,11 @@ export const GameEndPopup = ({
     return () => {
       clearInterval(interval);
     };
+  }, []);
+  
+  const shareClick = React.useCallback(() => {
+    setToastShown(true);
+    setTimeout(() => {setToastShown(false);}, 2500);
   }, []);
 
   return (
@@ -260,13 +266,15 @@ export const GameEndPopup = ({
               </Title>
               <Statistic>{timeTilTomorrow()}</Statistic>
             </CountdownContainer>
-            <ShareButton>SHARE</ShareButton>
+            <ShareButton onClick={shareClick}>SHARE</ShareButton>
           </div>
         </div>
       </PopupContainer>
-      <ToastContainer>
-        <Toast text={"Shared"}/>
-      </ToastContainer>
+      {toastShown && (
+        <ToastContainer>
+          <Toast text={"Copied results to clipboard"}/>
+        </ToastContainer>
+      )}
     </PopupOverlay>
   );
 };
