@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { timeTilTomorrow } from "../utils";
+import {TITLE} from "../static/globals";
 
 const PopupContainer = styled.div`
   color: ${(props) => props.theme.textColor};
@@ -253,7 +254,7 @@ export const GameEndPopup = ({
           >
             <CountdownContainer>
               <Title style={{ marginBottom: 0, marginTop: 16 }}>
-                NEXT WORDLE
+                NEXT {TITLE}
               </Title>
               <Statistic>{timeTilTomorrow()}</Statistic>
             </CountdownContainer>

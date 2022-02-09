@@ -43,7 +43,6 @@ export const ToastContainer = styled.div`
 
 export const Game = () => {
   // TODO: Show persistent answer if all 6 guesses used up
-  // TODO: Show guess state in keyboard
   // TODO: Show "Shared" toast in popup
   // TODO: Share output with link
 
