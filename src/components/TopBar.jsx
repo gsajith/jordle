@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { TITLE } from "../static/globals";
+import Question from "../icons/question.svg?component";
 
 const Title = styled.div`
   text-transform: uppercase;
@@ -22,10 +23,18 @@ const TopBarContainer = styled.div`
   user-select: none;
 `;
 
+const StyledQuestion = styled(Question)`
+  width: 24px;
+  height: 24px;
+  fill: ${props => props.theme.topBarIconColor};
+  margin-bottom: -8px;
+  margin-left: 8px;
+`;
+
 export const TopBar = () => {
   return (
     <TopBarContainer>
-      <div>x</div>
+      <div><StyledQuestion/></div>
       <Title>{TITLE}</Title>
       <div>y</div>
     </TopBarContainer>
