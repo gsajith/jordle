@@ -2,6 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { timeTilTomorrow } from "../utils";
 import {TITLE} from "../static/globals";
+import {ToastContainer} from "./Game";
+import {Toast} from "./Toast";
 
 const PopupContainer = styled.div`
   color: ${(props) => props.theme.textColor};
@@ -262,6 +264,9 @@ export const GameEndPopup = ({
           </div>
         </div>
       </PopupContainer>
+      <ToastContainer>
+        <Toast text={"Shared"}/>
+      </ToastContainer>
     </PopupOverlay>
   );
 };

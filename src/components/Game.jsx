@@ -361,6 +361,9 @@ export const Game = () => {
         {errors.map((error) => (
           <Toast text={error.text} />
         ))}
+        {numGuesses >= NUM_GUESSES && (
+          <Toast text={answer.current}/>
+        )}
       </ToastContainer>
     </>
   );
