@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import { timeTilTomorrow } from "../utils";
-import {TITLE, NUM_GUESSES} from "../static/globals";
-import {ToastContainer,NO, MAYBE, YES} from "./Game";
-import {Toast} from "./Toast";
+import { TITLE, NUM_GUESSES, URL } from "../static/globals";
+import { ToastContainer, NO, MAYBE, YES } from "./Game";
+import { Toast } from "./Toast";
 
 const PopupContainer = styled.div`
   color: ${(props) => props.theme.textColor};
@@ -151,6 +151,7 @@ Wordle 234 X/6
 ⬛🟩🟩⬛🟩
 
 */
+
 export const GameEndPopup = ({
   gamesPlayed = 0,
   gamesWon = 0,
@@ -173,30 +174,35 @@ export const GameEndPopup = ({
       clearInterval(interval);
     };
   }, []);
-  
+
   const shareClick = React.useCallback(() => {
     let shareString = "";
-    
+
     shareString += TITLE + " ";
     shareString += currentWinNumGuesses > 0 ? currentWinNumGuesses : "X";
     shareString += "/";
     shareString += NUM_GUESSES + "\n";
     shareString += "\n";
-    
-    guesses.forEach(guessArray => {
-      guessArray.forEach(arrayItem => {
+
+    guesses.forEach((guessArray) => {
+      guessArray.forEach((arrayItem) => {
         if (arrayItem.state === NO) {
           shareString += "⬛";
         } else if (arrayItem.state === MAYBE) {
           shareString += "🟨";
         } else if (arrayItem.state === YES) {
-          shareString += 
+          shareString += "🟩";
         }
-      })
-    })
+      });
+      shareString += "\n";
+    });
+    shareString += "\n";
+    shareString += URL;
     navigator.clipboard.writeText(shareString);
     setToastShown(true);
-    setTimeout(() => {setToastShown(false);}, 2500);
+    setTimeout(() => {
+      setToastShown(false);
+    }, 2500);
   }, []);
 
   return (
@@ -305,7 +311,7 @@ export const GameEndPopup = ({
       </PopupContainer>
       {toastShown && (
         <ToastContainer>
-          <Toast text={"Copied results to clipboard"}/>
+          <Toast text={"Copied results to clipboard"} />
         </ToastContainer>
       )}
     </PopupOverlay>

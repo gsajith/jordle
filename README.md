@@ -1,1 +1,0 @@
-## TODO: If game already started for today and word list length has changed, reset today's data
