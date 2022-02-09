@@ -2,6 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { TITLE } from "../static/globals";
 import Question from "../icons/question.svg?component";
+import Stats from "../icons/stats.svg?component";
+import Settings from "../icons/settings.svg?component";
 
 const Title = styled.div`
   text-transform: uppercase;
@@ -9,6 +11,10 @@ const Title = styled.div`
   font-size: 36px;
   letter-spacing: 3.2px;
   pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
 `;
 
 const TopBarContainer = styled.div`
@@ -17,7 +23,7 @@ const TopBarContainer = styled.div`
   align-items: center;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: ${props => props.theme.borderColor};
+  border-bottom-color: ${(props) => props.theme.borderColor};
   height: 50px;
   justify-content: space-between;
   user-select: none;
@@ -26,17 +32,48 @@ const TopBarContainer = styled.div`
 const StyledQuestion = styled(Question)`
   width: 24px;
   height: 24px;
-  fill: ${props => props.theme.topBarIconColor};
-  margin-bottom: -8px;
-  margin-left: 8px;
+  fill: ${(props) => props.theme.topBarIconColor};
+  margin: 0px 8px -4px 8px;
+  flex-shrink: 1;
 `;
 
-export const TopBar = () => {
+const StyledStats = styled(Stats)`
+  width: 24px;
+  height: 24px;
+  fill: ${(props) => props.theme.topBarIconColor};
+  margin: 0px 4px -4px 4px;
+  flex-shrink: 1;
+`;
+
+const StyledSettings = styled(Settings)`
+  width: 24px;
+  height: 24px;
+  fill: ${(props) => props.theme.topBarIconColor};
+  margin: 0px 4px -4px 0px;
+  flex-shrink: 1;
+`;
+
+const IconButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const TopBar = ({showGameEndPopup}) => {
   return (
     <TopBarContainer>
-      <div><StyledQuestion/></div>
+      <IconButton>
+        <StyledQuestion />
+      </IconButton>
       <Title>{TITLE}</Title>
-      <div>y</div>
+      <div>
+        <IconButton onClick={showGameEndPopup}>
+          <StyledStats />
+        </IconButton>
+        <IconButton>
+          <StyledSettings />
+        </IconButton>
+      </div>
     </TopBarContainer>
   );
 };

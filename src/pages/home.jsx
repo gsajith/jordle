@@ -15,10 +15,14 @@ const Container = styled.div`
 `;
 
 export default function Home() {
+  const [gameEndPopupShown, setGameEndPopupShown] = React.useState(false);
   return (
     <Container>
-      <TopBar />
-      <Game />
+      <TopBar showGameEndPopup={() => setGameEndPopupShown(true)}/>
+      <Game
+        gameEndPopupShown={gameEndPopupShown}
+        setGameEndPopupShown={setGameEndPopupShown}
+      />
     </Container>
   );
 }

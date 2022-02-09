@@ -41,7 +41,7 @@ export const ToastContainer = styled.div`
   transform: translate(-50%, 0);
 `;
 
-export const Game = () => {
+export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
   // TODO: Share output with link
 
   // ********************* PERSISTENT GAME STATE ******************** //
@@ -80,7 +80,6 @@ export const Game = () => {
   // ******************** END PERSISTENT GAME STATE ***************** //
 
   const [errors, setErrors] = React.useState([]);
-  const [gameEndPopupShown, setGameEndPopupShown] = React.useState(false);
   const answer = React.useRef(null);
   const errorNumber = React.useRef(0);
   const todaysDateString = React.useRef(0);
