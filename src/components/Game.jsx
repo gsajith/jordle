@@ -15,6 +15,14 @@ export const NO = 2;
 export const MAYBE = 3;
 export const YES = 4;
 
+const GameWrapper = styled.div`
+  width: 100%;
+  max-width: 500px;
+  height: calc(100% - 50px);
+  display: flex;
+  flex-direction: column;
+`;
+
 const Title = styled.div`
   text-transform: uppercase;
   font-weight: 800;
@@ -41,7 +49,7 @@ export const ToastContainer = styled.div`
   transform: translate(-50%, 0);
 `;
 
-export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
+export const Game = ({ gameEndPopupShown, setGameEndPopupShown }) => {
   // TODO: Share output with link
 
   // ********************* PERSISTENT GAME STATE ******************** //
@@ -260,7 +268,12 @@ export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
     var lastGuessLine = 0;
 
     for (var i = 0; i < guesses.length; i++) {
-      if (guesses && guesses[i] && guesses[i][0] && guesses[i][0].state !== GUESS) {
+      if (
+        guesses &&
+        guesses[i] &&
+        guesses[i][0] &&
+        guesses[i][0].state !== GUESS
+      ) {
         if (
           !guesses[i + 1] ||
           !guesses[i + 1][0] ||
@@ -308,7 +321,7 @@ export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
 
     const seededRand = getSeededRand("@guamhat");
     const shuffledWordList = shuffle(allWords, seededRand);
-    const selectedWord = shuffledWordList[dateIndex % shuffledWordList.length];
+    const selectedWord = "JAMIE";
 
     answer.current = selectedWord;
     // console.log(selectedWord);
@@ -344,23 +357,23 @@ export const Game = ({gameEndPopupShown, setGameEndPopupShown}) => {
           guesses={guesses}
         />
       )}
-      <GameContainer>
-        <GameGrid guesses={guesses} />
-      </GameContainer>
-      <Keyboard
-        addGuessLetter={addGuessLetter}
-        removeGuessLetter={removeGuessLetter}
-        submitGuess={submitGuess}
-        guesses={guesses}
-        numGuesses={numGuesses}
-      />
+      <GameWrapper>
+        <GameContainer>
+          <GameGrid guesses={guesses} />
+        </GameContainer>
+        <Keyboard
+          addGuessLetter={addGuessLetter}
+          removeGuessLetter={removeGuessLetter}
+          submitGuess={submitGuess}
+          guesses={guesses}
+          numGuesses={numGuesses}
+        />
+      </GameWrapper>
       <ToastContainer>
         {errors.map((error) => (
           <Toast text={error.text} />
         ))}
-        {numGuesses >= NUM_GUESSES && (
-          <Toast text={answer.current}/>
-        )}
+        {numGuesses >= NUM_GUESSES && <Toast text={answer.current} />}
       </ToastContainer>
     </>
   );

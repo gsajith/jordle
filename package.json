@@ -1,7 +1,7 @@
 {
-  "name": "glitch-hello-react",
+  "name": "jordle",
   "version": "0.0.3",
-  "description": "A simple React single page app, built with Vite and React.",
+  "description": "Jordle game.",
   "scripts": {
     "start": "vite",
     "build": "vite build",

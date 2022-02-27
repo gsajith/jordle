@@ -1,7 +1,7 @@
 {
   "glitch-help-instructions": "For a custom domain, change the 'url' parameter from 'glitch-default' to your domain _without_ a traling slash, like 'https://www.example.com'",
-  "title": "Foodle",
-  "description": "A Foodle Wordle game",
-  "url": "foodle",
-  "image": "https://cdn.glitch.global/a7177a6e-0346-45cc-86ff-224d1ec1a24e/Foodle%20image.png?v=1644295946815"
+  "title": "Jordle",
+  "description": "A Jordle Wordle game",
+  "url": "jordle",
+  "image": "https://cdn.glitch.global/4129ed32-5264-492d-bbd8-c2b2ad56c611/Jordle%20image.png?v=1645923344221"
 }
