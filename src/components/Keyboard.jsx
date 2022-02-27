@@ -8,6 +8,9 @@ const KeyboardContainer = styled.div`
   height: 200px;
   margin: 0 8px;
   user-select: none;
+  @media (max-height: 640px) {
+    height: 110px;
+  }
 `;
 
 const Row = styled.div`
@@ -30,6 +33,9 @@ const Key = styled.button`
   padding: 0;
   margin: 0 6px 0 0;
   height: 58px;
+  @media (max-height: 640px) {
+    height: 28px;
+  }
   border-radius: 4px;
   cursor: pointer;
   user-select: none;

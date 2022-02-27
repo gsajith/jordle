@@ -9,8 +9,12 @@ const GameGridContainer = styled.div`
   grid-gap: 5px;
   padding: 10px;
   box-sizing: border-box;
-  width: 350px;
-  height: 420px;
+  width: 350px;  
+  max-height: 420px;
+  height: 100%;
+  @media (max-height: 640px) {
+    width: 50vh;
+  }
 `;
 
 const GridRow = styled.div`
