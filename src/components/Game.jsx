@@ -321,7 +321,13 @@ export const Game = ({ gameEndPopupShown, setGameEndPopupShown }) => {
 
     const seededRand = getSeededRand("@guamhat");
     const shuffledWordList = shuffle(allWords, seededRand);
-    const selectedWord = "JAMIE";
+    let selectedWord = "JAMIE";
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth()+1).padStart(2, '0');
+    if (mm === "04" && dd === "01") {
+      selectedWord = "JOVAL";
+    }
 
     answer.current = selectedWord;
     // console.log(selectedWord);

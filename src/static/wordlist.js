@@ -835,6 +835,7 @@ gaffe
 gaily
 gamer
 jamie
+joval
 gamma
 gamut
 gassy
@@ -1057,6 +1058,7 @@ jerky
 jetty
 jewel
 jiffy
+jihad
 joint
 joist
 joker
