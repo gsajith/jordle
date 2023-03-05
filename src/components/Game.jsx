@@ -325,9 +325,19 @@ export const Game = ({ gameEndPopupShown, setGameEndPopupShown }) => {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
     let mm = String(today.getMonth()+1).padStart(2, '0');
+    if (mm === "03" && dd === "05") {
+      selectedWord = "JOVAL";
+    }
     if (mm === "04" && dd === "01") {
       selectedWord = "JOVAL";
     }
+    if (mm === "12" && dd === "25") {
+      selectedWord = "JESUS";
+    }
+    if (mm === "12" && dd === "24") {
+      selectedWord = "JANTA";
+    }
+    
 
     answer.current = selectedWord;
     // console.log(selectedWord);
