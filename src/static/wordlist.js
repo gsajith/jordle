@@ -1057,6 +1057,8 @@ jelly
 jerky
 jetty
 jewel
+jamie
+jesus
 jiffy
 jihad
 joint
